@@ -135,8 +135,17 @@ int main() {
 	parameters[10]=2.5;
 	parameters[11]=2;
 
+	int sol;
 
-	solve(parameters ,11,cons,11,1);
+	sol=solve(parameters ,11,cons,11,rough);
+	if(sol==succsess)
+	{
+		cout<<"A good Solution was found"<<endl;
+	}
+	else if(sol==noSolution)
+	{
+		cout<<"No valid Solutions were found from this start point"<<endl;
+	}
 	}
 	//end
 	return 0;

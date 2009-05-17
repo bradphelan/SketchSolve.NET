@@ -15,7 +15,7 @@
 
 using namespace std;
 
-void solve(double  x[],int xLength, constraint * cons, int consLength, int isFine)
+int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine)
 {
 	//integer to keep track of how many times calc is called
 	int ftimes=0;
@@ -438,6 +438,8 @@ void solve(double  x[],int xLength, constraint * cons, int consLength, int isFin
 	cout<<"Number of function calls: "<<ftimes<<endl;
 
 	///End of function
+	if(fnew<smallF) return succsess;
+	else return noSolution;
 }
 
 

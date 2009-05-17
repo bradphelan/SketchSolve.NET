@@ -46,6 +46,15 @@
 #define XconvergenceRough 1e-4
 #define XconvergenceFine  1e-10
 #define smallF            1e-20
+#define rough             0
+#define fine              1
+
+///////////////////////////////////////
+/// Solve exit codes
+///////////////////////////////////////
+
+#define succsess 0
+#define noSolution 1
 
 ///////////////////////////////////////////////////////////////////////
 /// constraint defines (these make writing constraint equations easier
@@ -130,7 +139,7 @@ struct constraint
 
 
 //Function Prototypes
-void solve(double  x[],int xLength, constraint * cons, int consLength, int isFine);
+int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine);
 double calc(constraint * cons, int consLength);
 
 #endif /* SOLVE_H_ */
