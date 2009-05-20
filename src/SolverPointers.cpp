@@ -35,10 +35,10 @@ int main() {
 	parameters[4]=10;//xstart
 	parameters[5]=.5;//y
 	parameters[6]=10;//xend
-	parameters[7]=5.5;//y
+	parameters[7]=-5.5;//y
 	parameters[8]=9;//xcenter
-	parameters[9]=3;//y
-	parameters[10]=0;
+	parameters[9]=10;//y
+	parameters[10]=2;
 
 	point origin;
 	double zero = 0;
@@ -48,6 +48,7 @@ int main() {
 	constants[0]=5;
 	constants[1]=15;
 	constants[2]=2;
+	constants[3]=M_PI/4;
 
 	points[0].x = &parameters[0];
 	points[0].y = &parameters[1];
@@ -86,8 +87,10 @@ int main() {
 	cons[2].type = horizontal;
 	cons[2].line1 = lines[1];
 
-	cons[3].type = vertical;
-	cons[3].line1 = lines[2];
+	cons[3].type = perpendicular;
+	cons[3].line1 = lines[0];
+	cons[3].line2 = lines[2];
+	cons[3].parameter = &constants[3];
 
 	cons[4].type = arcRules;
 	cons[4].arc1 = arcs[0];
@@ -122,22 +125,21 @@ int main() {
 	//x[0]=45;
 	for(int i=0;i<1;i++)
 	{
-	parameters[0]=1;//1x
-	parameters[1]=1;//y
-	parameters[2]=14;//x
-	parameters[3]=-.5;//y
-	parameters[4]=6;//xstart
-	parameters[5]=12;//y
-	parameters[6]=13.5;//xend
-	parameters[7]=11;//y
-	parameters[8]=-.5;//xcenter
-	parameters[9]=9;//y
+	parameters[0]=0;//1x
+	parameters[1]=0;//y
+	parameters[2]=15;//x
+	parameters[3]=0;//y
+	parameters[4]=15;//xstart
+	parameters[5]=5;//y
+	parameters[6]=15;//xend
+	parameters[7]=10.5;//y
+	parameters[8]=8;//xcenter
+	parameters[9]=10;//y
 	parameters[10]=2.5;
-	parameters[11]=2;
 
 	int sol;
 
-	sol=solve(parameters ,11,cons,11,rough);
+	sol=solve(parameters ,11,cons,11,fine);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;

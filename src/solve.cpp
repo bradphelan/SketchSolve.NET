@@ -438,7 +438,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	cout<<"Number of function calls: "<<ftimes<<endl;
 
 	///End of function
-	if(fnew<smallF) return succsess;
+	if(fnew<validSolution) return succsess;
 	else return noSolution;
 }
 
@@ -447,7 +447,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 double calc(constraint * cons, int consLength)
 {
 	double error=0;
-	double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,Xint,Yint;
+	double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,Xint,Yint,dx2,dy2,hyp1,hyp2,temp2;
 	for(int i=0;i<consLength;i++)
 	{
 		if((cons[i]).type==pointOnPoint)
@@ -663,6 +663,83 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==circleRadius)
 		{
 			error += (C1_rad - radius)*(C1_rad - radius);
+		}
+		if(cons[i].type==internalAngle)
+		{
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+			dx2 = L2_P2_x - L2_P1_x;
+			dy2 = L2_P2_y - L2_P1_y;
+
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
+
+			dx=dx/hyp1;
+			dy=dy/hyp1;
+			dx2=dx2/hyp2;
+			dy2=dy2/hyp2;
+
+			temp = dx*dx2+dy*dy2;
+			temp2 = cos(angleP);
+			error += (temp+temp2)*(temp+temp2);
+		}
+
+		if(cons[i].type==externalAngle)
+		{
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+			dx2 = L2_P2_x - L2_P1_x;
+			dy2 = L2_P2_y - L2_P1_y;
+
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
+
+			dx=dx/hyp1;
+			dy=dy/hyp1;
+			dx2=dx2/hyp2;
+			dy2=dy2/hyp2;
+
+			temp = dx*dx2-dy*dy2;
+			temp2 = cos(M_PI-angleP);
+			error += (temp+temp2)*(temp+temp2);
+		}
+
+		if(cons[i].type==perpendicular)
+		{
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+			dx2 = L2_P2_x - L2_P1_x;
+			dy2 = L2_P2_y - L2_P1_y;
+
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
+
+			dx=-dx/hyp1;
+			dy=dy/hyp1;
+			dx2=dx2/hyp2;
+			dy2=dy2/hyp2;
+
+			temp = dx*dx2-dy*dy2;
+			error += (temp)*(temp);
+		}
+
+		if(cons[i].type==parallel)
+		{
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+			dx2 = L2_P2_x - L2_P1_x;
+			dy2 = L2_P2_y - L2_P1_y;
+
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
+
+			dx=dx/hyp1;
+			dy=dy/hyp1;
+			dx2=dx2/hyp2;
+			dy2=dy2/hyp2;
+
+			temp = dx*dx2-dy*dy2;
+			error += (temp)*(temp);
 		}
 	}
 	return error;

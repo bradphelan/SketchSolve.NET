@@ -16,7 +16,7 @@
 #define pointOnCurve     2
 #define horizontal       3
 #define vertical         4
-#define angle			 5
+#define internalAngle	 5
 #define radiusValue		 6
 #define tangentToArc	 7
 #define tangentToCircle	 8
@@ -37,15 +37,19 @@
 #define concentricCircles    23
 #define concentricCircArc    24
 #define circleRadius         25
+#define externalAngle    26
+#define parallel         27
+#define perpendicular    28
 
 
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pert              1e-10
+#define pert              1e-14
 #define XconvergenceRough 1e-4
-#define XconvergenceFine  1e-10
+#define XconvergenceFine  1e-14
 #define smallF            1e-20
+#define validSolution     1e-12
 #define rough             0
 #define fine              1
 
@@ -92,7 +96,7 @@
 #define length		   *cons[i].parameter
 #define distance	   *cons[i].parameter
 #define radius		   *cons[i].parameter
-
+#define angleP		   *cons[i].parameter
 
 
 struct point
