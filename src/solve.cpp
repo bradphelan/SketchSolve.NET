@@ -473,7 +473,7 @@ double calc(constraint * cons, int consLength)
 		}
 
 
-		if((cons[i]).type==pointOnCurve)
+		if((cons[i]).type==pointOnLine)
 		{
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
@@ -481,7 +481,7 @@ double calc(constraint * cons, int consLength)
 			m=dy/dx; //Slope
 			n=dx/dy; //1/Slope
 
-			if(m<=1)
+			if(m<=1 && m>=-1)
 			{
 				//Calculate the expected y point given the x coordinate of the point
 				Ey=L1_P1_y+m*(P1_x-L1_P1_x);
@@ -580,7 +580,7 @@ double calc(constraint * cons, int consLength)
 
 			m=dy / dx;
 			n=dx / dy;
-			if(m<=1)
+			if(m<=1 && m>=-1)
 			{
 				Ey=L1_P1_y + m * (Rpx - L1_P1_x);
 				error1=(Ey - Rpy) * (Ey - Rpy);
@@ -740,6 +740,36 @@ double calc(constraint * cons, int consLength)
 
 			temp = dx*dx2-dy*dy2;
 			error += (temp)*(temp);
+		}
+		// Colinear constraint
+		if(cons[i].type==colinear)
+		{
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+
+			m=dy/dx;
+			n=dx/dy;
+			// Calculate the error between the expected intersection point
+			// and the true point of the second lines two end points on the
+			// first line
+			if(m<=1 && m>-1)
+			{
+				//Calculate the expected y point given the x coordinate of the point
+				Ey=L1_P1_y+m*(L2_P1_x-L1_P1_x);
+				error+=(Ey-L2_P1_y)*(Ey-L2_P1_y);
+
+				Ey=L1_P1_y+m*(L2_P2_x-L1_P1_x);
+				error+=(Ey-L2_P2_y)*(Ey-L2_P2_y);
+			}
+			else
+			{
+				//Calculate the expected x point given the y coordinate of the point
+				Ex=L1_P1_x+n*(L2_P1_y-L1_P1_y);
+				error+=(Ex-L2_P1_x)*(Ex-L2_P1_x);
+
+				Ex=L1_P1_x+n*(L2_P2_y-L1_P1_y);
+				error+=(Ex-L2_P2_x)*(Ex-L2_P2_x);
+			}
 		}
 	}
 	return error;

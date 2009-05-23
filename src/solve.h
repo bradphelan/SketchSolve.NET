@@ -13,7 +13,7 @@
 
 #define pointOnPoint	 0
 #define pointToLine 	 1
-#define pointOnCurve     2
+#define pointOnLine     2
 #define horizontal       3
 #define vertical         4
 #define internalAngle	 5
@@ -40,6 +40,7 @@
 #define externalAngle    26
 #define parallel         27
 #define perpendicular    28
+#define colinear	     29
 
 
 ///////////////////////////////////////

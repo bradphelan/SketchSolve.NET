@@ -40,6 +40,11 @@ int main() {
 	parameters[9]=10;//y
 	parameters[10]=2;
 
+	parameters[11]=.5;
+	parameters[12]=.5;
+	parameters[13]=1;
+	parameters[14]=10;
+
 	point origin;
 	double zero = 0;
 	origin.x = &zero;
@@ -48,7 +53,7 @@ int main() {
 	constants[0]=5;
 	constants[1]=15;
 	constants[2]=2;
-	constants[3]=M_PI/4;
+	constants[3]=M_PI/3;
 
 	points[0].x = &parameters[0];
 	points[0].y = &parameters[1];
@@ -61,12 +66,19 @@ int main() {
 	points[4].x = &parameters[8];
 	points[4].y = &parameters[9];
 
+	points[5].x = &parameters[11];
+	points[5].y = &parameters[12];
+	points[6].x = &parameters[13];
+	points[6].y = &parameters[14];
+
 	lines[0].p1 = points[0];
 	lines[0].p2 = points[1];
 	lines[1].p1 = points[3];
 	lines[1].p2 = points[4];
 	lines[2].p1 = points[4];
 	lines[2].p2 = points[0];
+	lines[3].p1 = points[5];
+	lines[3].p2 = points[6];
 
 
 	circles[0].center = points[2];
@@ -87,7 +99,7 @@ int main() {
 	cons[2].type = horizontal;
 	cons[2].line1 = lines[1];
 
-	cons[3].type = perpendicular;
+	cons[3].type = internalAngle;
 	cons[3].line1 = lines[0];
 	cons[3].line2 = lines[2];
 	cons[3].parameter = &constants[3];
@@ -119,7 +131,9 @@ int main() {
 	cons[10].arc1 = arcs[0];
 	cons[10].line1 = lines[1];
 
-
+	cons[11].type = colinear;
+	cons[11].line1 = lines[2];
+	cons[11].line2 = lines[3];
 
 	//double x [5];
 	//x[0]=45;
@@ -139,7 +153,7 @@ int main() {
 
 	int sol;
 
-	sol=solve(parameters ,11,cons,11,fine);
+	sol=solve(parameters ,15,cons,12,fine);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;
