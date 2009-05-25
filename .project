@@ -67,4 +67,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.core.cnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>SketchSolveDocs/Constraints Table.ods</name>
+			<type>1</type>
+			<location>G:/C++ Projects/SketchSolveDocs/Constraints Table.ods</location>
+		</link>
+		<link>
+			<name>SketchSolveDocs/ConstraintsTable.JPG</name>
+			<type>1</type>
+			<location>G:/C++ Projects/SketchSolveDocs/Constraints Table.JPG</location>
+		</link>
+	</linkedResources>
 </projectDescription>
