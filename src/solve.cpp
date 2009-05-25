@@ -10,18 +10,22 @@
  */
 
 #include "solve.h"
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 
 using namespace std;
 
 int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine)
 {
+	double convergence;
+	if(isFine>0) convergence = XconvergenceFine;
+	else convergence = XconvergenceRough;
 	//integer to keep track of how many times calc is called
 	int ftimes=0;
 	//Calculate Function at the starting point:
 	double f0;
 	f0 = calc(cons,consLength);
+	if(f0<smallF) return succsess;
 	ftimes++;
 	//Calculate the gradient at the starting point:
 
@@ -36,7 +40,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 		x[j]= x[j]+pert;
 		grad[j]=(calc(cons,consLength)-f0)/pert;
 		ftimes++;
-		//cout<<"gradient: "<<grad[j]<<endl;
+		cout<<"gradient: "<<grad[j]<<endl;
 		x[j]-=pert;
 		norm = norm+(grad[j]*grad[j]);
 	}
@@ -190,9 +194,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	{
 		deltaX[i]=x[i]-xold[i];//Calculate the difference in x for the Hessian update
 	}
-	double convergence;
-	if(isFine>0) convergence = XconvergenceFine;
-	else convergence = XconvergenceRough;
+
 	while(deltaXnorm>convergence && fnew>smallF)
 	{
 	//////////////////////////////////////////////////////////////////////
@@ -594,15 +596,24 @@ double calc(constraint * cons, int consLength)
 				Ex=L1_P1_x + n * (RpyN - L1_P1_y);
 				error2=(Ex - RpxN) * (Ex - RpxN);
 			}
-			if(error1<error2) error+=error1;
-			else error+=error2;
+			if(error1<error2)
+			{
+				error+=error1;
+				//cout<<"error: "<<error1<<endl;
+			}
+			else
+			{
+				error+=error2;
+				//cout<<"error: "<<error2<<endl;
+			}
+
 		}
 
 		if(cons[i].type==arcRules)
 		{
 			rad1=hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
 			rad2=hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
-			error+=(rad1 - rad2) * (rad1 - rad2);
+			error += (rad1-rad2)*(rad1-rad2);
 			}
 
 		if(cons[i].type==lineLength)
@@ -620,6 +631,7 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==arcRadius)
 		{
 			rad1 = hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			rad2 = hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
 			temp= rad1 - radius ;
 			error += temp*temp;
 		}
@@ -657,7 +669,8 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==concentricCircArc)
 		{
-			error += hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
+			temp = hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
+			error += temp*temp;
 		}
 
 		if(cons[i].type==circleRadius)
@@ -770,6 +783,68 @@ double calc(constraint * cons, int consLength)
 				Ex=L1_P1_x+n*(L2_P2_y-L1_P1_y);
 				error+=(Ex-L2_P2_x)*(Ex-L2_P2_x);
 			}
+		}
+		// Point on a circle
+		if(cons[i].type == pointOnCircle)
+		{
+			//see what the current radius to the point is
+			rad1=hypot(C1_Center_x-P1_x,C1_Center_y-P1_y);
+			//Compare this radius to the radius of the circle, return the error squared
+			temp = rad1-C1_rad;
+			error += temp*temp;
+			//cout<<"Point On circle error"<<temp*temp<<endl;
+		}
+		if(cons[i].type == pointOnArc)
+		{
+			//see what the current radius to the point is
+			rad1=hypot(A1_Center_x-P1_x,A1_Center_y-P1_y);
+			rad2=hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
+			//Compare this radius to the radius of the circle, return the error squared
+			temp = rad1-rad2;
+			error += temp*temp;
+			//cout<<"Point On circle error"<<temp*temp<<endl;
+		}
+		if(cons[i].type == pointOnLineMidpoint)
+		{
+			Ex=(L1_P1_x+L1_P2_x)/2;
+			Ey=(L1_P1_y+L1_P2_y)/2;
+			temp = Ex-P1_x;
+			temp2 = Ey-P1_y;
+			error += temp*temp+temp2*temp2;
+		}
+		if(cons[i].type == pointOnArcMidpoint)
+		{
+			rad1=hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
+			temp = atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
+			temp2= atan2(A1_End_y-A1_Center_y,A1_End_x-A1_Center_x);
+			Ex=A1_Center_x+rad1*cos((temp2+temp)/2);
+			Ey=A1_Center_y+rad1*sin((temp2+temp)/2);
+			temp = (Ex-P1_x);
+			temp2 = (Ey-P1_y);
+			error += temp*temp+temp2*temp2;
+		}
+
+		if(cons[i].type == pointOnCircleQuad)
+		{
+			Ex=C1_Center_x;
+			Ey=C1_Center_y;
+			switch((int)quadIndex)
+			{
+				case 0:
+					Ex+=C1_rad;
+					break;
+				case 1:
+					Ey+=C1_rad;
+					break;
+				case 2:
+					Ex-=C1_rad;
+					break;
+				case 3:
+					Ey-=C1_rad;
+			}
+			temp = (Ex-P1_x);
+			temp2 = (Ey-P1_y);
+			error += temp*temp+temp2*temp2;
 		}
 	}
 	return error;

@@ -41,14 +41,20 @@
 #define parallel         27
 #define perpendicular    28
 #define colinear	     29
+#define pointOnCircle    30
+#define pointOnArc       31
+#define pointOnLineMidpoint  32
+#define pointOnArcMidpoint   33
+#define pointOnCircleQuad    34
+
 
 
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pert              1e-14
+#define pert              1e-11
 #define XconvergenceRough 1e-4
-#define XconvergenceFine  1e-14
+#define XconvergenceFine  1e-12
 #define smallF            1e-20
 #define validSolution     1e-12
 #define rough             0
@@ -98,6 +104,7 @@
 #define distance	   *cons[i].parameter
 #define radius		   *cons[i].parameter
 #define angleP		   *cons[i].parameter
+#define quadIndex      *cons[i].parameter
 
 
 struct point
@@ -132,6 +139,7 @@ struct constraint
 	point point2;
 	line line1;
 	line line2;
+	line SymmLine;
 	circle circle1;
 	circle circle2;
 	arc arc1;
