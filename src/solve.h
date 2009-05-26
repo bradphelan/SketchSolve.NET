@@ -46,6 +46,10 @@
 #define pointOnLineMidpoint  32
 #define pointOnArcMidpoint   33
 #define pointOnCircleQuad    34
+#define symmetricPoints      35
+#define symmetricLines       36
+#define symmetricCircles	 37
+#define symmetricArcs		 38
 
 
 
@@ -105,6 +109,10 @@
 #define radius		   *cons[i].parameter
 #define angleP		   *cons[i].parameter
 #define quadIndex      *cons[i].parameter
+#define Sym_P1_x       *cons[i].SymLine.p1.x
+#define Sym_P1_y       *cons[i].SymLine.p1.y
+#define Sym_P2_x       *cons[i].SymLine.p2.x
+#define Sym_P2_y       *cons[i].SymLine.p2.y
 
 
 struct point
@@ -139,7 +147,7 @@ struct constraint
 	point point2;
 	line line1;
 	line line2;
-	line SymmLine;
+	line SymLine;
 	circle circle1;
 	circle circle2;
 	arc arc1;

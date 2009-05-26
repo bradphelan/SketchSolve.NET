@@ -846,6 +846,70 @@ double calc(constraint * cons, int consLength)
 			temp2 = (Ey-P1_y);
 			error += temp*temp+temp2*temp2;
 		}
+		if(cons[i].type == symmetricPoints)
+		{
+			dx=Sym_P2_x-Sym_P1_x;
+			dy=Sym_P2_y-Sym_P1_y;
+			t=-(dy*P1_x-dx*P1_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = P1_x+dy*t*2;
+			Ey = P1_y-dx*t*2;
+			temp = (Ex-P2_x);
+			temp2 = (Ey-P2_y);
+			error += temp*temp+temp2*temp2;
+		}
+		if(cons[i].type == symmetricLines)
+		{
+			dx=Sym_P2_x-Sym_P1_x;
+			dy=Sym_P2_y-Sym_P1_y;
+			t=-(dy*L1_P1_x-dx*L1_P1_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = L1_P1_x+dy*t*2;
+			Ey = L1_P1_y-dx*t*2;
+			temp = (Ex-L2_P1_x);
+			temp2 = (Ey-L2_P1_y);
+			error += temp*temp+temp2*temp2;
+			t=-(dy*L1_P2_x-dx*L1_P2_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = L1_P2_x+dy*t*2;
+			Ey = L1_P2_y-dx*t*2;
+			temp = (Ex-L2_P2_x);
+			temp2 = (Ey-L2_P2_y);
+			error += temp*temp+temp2*temp2;
+		}
+		if(cons[i].type == symmetricCircles)
+		{
+			dx=Sym_P2_x-Sym_P1_x;
+			dy=Sym_P2_y-Sym_P1_y;
+			t=-(dy*C1_Center_x-dx*C1_Center_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = C1_Center_x+dy*t*2;
+			Ey = C1_Center_y-dx*t*2;
+			temp = (Ex-C2_Center_x);
+			temp2 = (Ey-C2_Center_y);
+			error += temp*temp+temp2*temp2;
+			temp = (C1_rad-C2_rad);
+			error += temp*temp;
+		}
+		if(cons[i].type == symmetricArcs)
+		{
+			dx=Sym_P2_x-Sym_P1_x;
+			dy=Sym_P2_y-Sym_P1_y;
+			t=-(dy*A1_Start_x-dx*A1_Start_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = A1_Start_x+dy*t*2;
+			Ey = A1_Start_y-dx*t*2;
+			temp = (Ex-A2_Start_x);
+			temp2 = (Ey-A2_Start_y);
+			error += temp*temp+temp2*temp2;
+			t=-(dy*A1_End_x-dx*A1_End_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = A1_End_x+dy*t*2;
+			Ey = A1_End_y-dx*t*2;
+			temp = (Ex-A2_End_x);
+			temp2 = (Ey-A2_End_y);
+			error += temp*temp+temp2*temp2;
+			t=-(dy*A1_Center_x-dx*A1_Center_y-dy*Sym_P1_x+dx*Sym_P1_y)/(dx*dx+dy*dy);
+			Ex = A1_Center_x+dy*t*2;
+			Ey = A1_Center_y-dx*t*2;
+			temp = (Ex-A2_Center_x);
+			temp2 = (Ey-A2_Center_y);
+			error += temp*temp+temp2*temp2;
+		}
 	}
 	return error;
 

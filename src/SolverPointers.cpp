@@ -46,6 +46,19 @@ int main() {
 	parameters[14]=10;
 	parameters[15]=13.72;
 	parameters[16]=3.46;
+	parameters[17]=-6;
+	parameters[18]=12;
+	parameters[19]=12;
+	parameters[20]=12;
+	parameters[21]=3;
+
+	parameters[22]=3;
+	parameters[23]=4;
+	parameters[24]=6;
+	parameters[25]=7;
+	parameters[26]=10;
+	parameters[27]=15;
+
 
 	point origin;
 	double zero = 0;
@@ -55,7 +68,7 @@ int main() {
 	constants[0]=5;
 	constants[1]=15;
 	constants[2]=2;
-	constants[3]=M_PI/2;
+	constants[3]=M_PI/3;
 	constants[4]=3;
 
 	points[0].x = &parameters[0];
@@ -70,6 +83,7 @@ int main() {
 	points[4].y = &parameters[9];
 
 
+
 	points[5].x = &parameters[11];
 	points[5].y = &parameters[12];
 	points[6].x = &parameters[13];
@@ -77,6 +91,17 @@ int main() {
 
 	points[7].x = &parameters[15];
 	points[7].y = &parameters[16];
+	points[8].x = &parameters[17];
+	points[8].y = &parameters[18];
+	points[9].x = &parameters[19];
+	points[9].y = &parameters[20];
+
+	points[10].x = &parameters[22];
+	points[10].y = &parameters[23];
+	points[11].x = &parameters[24];
+	points[11].y = &parameters[25];
+	points[12].x = &parameters[26];
+	points[12].y = &parameters[27];
 
 	lines[0].p1 = points[0];
 	lines[0].p2 = points[1];
@@ -86,14 +111,22 @@ int main() {
 	lines[2].p2 = points[0];
 	lines[3].p1 = points[5];
 	lines[3].p2 = points[6];
+	lines[4].p1 = points[7];
+	lines[4].p2 = points[8];
 
 
 	circles[0].center = points[2];
 	circles[0].rad = &parameters[10];
+	circles[1].center = points[9];
+	circles[1].rad = &parameters[21];
 
 	arcs[0].center = points[2];
 	arcs[0].start = points[1];
 	arcs[0].end = points[3];
+
+	arcs[1].center = points[10];
+	arcs[1].start = points[11];
+	arcs[1].end = points[12];
 
 
 	cons[0].type = pointOnPoint;
@@ -141,10 +174,20 @@ int main() {
 	cons[11].line1 = lines[2];
 	cons[11].line2 = lines[3];
 
-	cons[10].type = pointOnCircleQuad;
-	cons[10].circle1 = circles[0];
-	cons[10].point1 = points[7];
-	cons[10].parameter = &constants[4];
+	cons[10].type = symmetricLines;
+	cons[10].SymLine = lines[2];
+	cons[10].line1 = lines[0];
+	cons[10].line2 = lines[4];
+
+	cons[11].type = symmetricCircles;
+	cons[11].SymLine = lines[2];
+	cons[11].circle1 = circles[0];
+	cons[11].circle2 = circles[1];
+
+	cons[12].type = symmetricArcs;
+	cons[12].SymLine = lines[2];
+	cons[12].arc1 = arcs[0];
+	cons[12].arc2 = arcs[1];
 
 	//double x [5];
 	//x[0]=45;
@@ -166,7 +209,7 @@ int main() {
 
 	int sol;
 
-	sol=solve(parameters ,17,cons,11,fine);
+	sol=solve(parameters ,28,cons,13,fine);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;
