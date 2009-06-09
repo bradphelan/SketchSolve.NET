@@ -659,12 +659,14 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==concentricArcs)
 		{
-			error += hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
+			temp = hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
+			error += temp*temp;
 		}
 
 		if(cons[i].type==concentricCircles)
 		{
-			error += hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y);
+			temp = pow(hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y),2);
+			error += temp*temp;
 		}
 
 		if(cons[i].type==concentricCircArc)
