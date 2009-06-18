@@ -31,7 +31,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 
 	//Calculate the gradient
 	//gradF=x;
-	double grad[xLength]; //The gradient vector (1xn)
+	double *grad = new double[xLength]; //The gradient vector (1xn)
 	double norm; //The norm of the gradient vector
 	double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
 	norm = 0;
@@ -48,8 +48,10 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	//Estimate the norm of N
 
 	//Initialize N and calculate s
-	double s [xLength]; //The current search direction
-	double N [xLength][xLength]; //The estimate of the Hessian inverse
+	double *s = new double[xLength]; //The current search direction
+	double **N = new double*[xLength];
+	for(int i=0; i < xLength; i++)
+		N[i] = new double[xLength]; //The estimate of the Hessian inverse
 	for(int i=0;i<xLength;i++)
 	{
 		for(int j=0;j<xLength;j++)
@@ -69,7 +71,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	fnew=f0+1; 	//make fnew greater than fold
 	double alpha=1; //Initial search vector multiplier
 
-	double xold[xLength]; //Storage for the previous design variables
+	double *xold = new double[xLength]; //Storage for the previous design variables
 	double fold;
 	for(int i=0;i<xLength;i++)
 	{
@@ -172,18 +174,25 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 
 
 
-	double deltaX[xLength];
-	double gradnew[xLength];
-	double gamma[xLength];
+	double *deltaX = new double[xLength];
+	double *gradnew = new double[xLength];
+	double *gamma = new double[xLength];
 	double bottom=0;
 	double deltaXtDotGamma;
-	double gammatDotN[1][xLength];
+	double *gammatDotN = new double[xLength];
 	double gammatDotNDotGamma=0;
 	double firstTerm=0;
-	double FirstSecond[xLength][xLength];
-	double deltaXDotGammatDotN[xLength][xLength];
-	double gammatDotDeltaXt[xLength][xLength];
-	double NDotGammaDotDeltaXt[xLength][xLength];
+	double **FirstSecond = new double*[xLength];
+	double **deltaXDotGammatDotN = new double*[xLength];
+	double **gammatDotDeltaXt = new double*[xLength];
+	double **NDotGammaDotDeltaXt = new double*[xLength];
+	for(int i=0; i < xLength; i++)
+	{
+		FirstSecond[i] = new double[xLength];
+		deltaXDotGammatDotN[i] = new double[xLength];
+		gammatDotDeltaXt[i] = new double[xLength];
+		NDotGammaDotDeltaXt[i] = new double[xLength];
+	}
 	double deltaXnorm=1;
 
 	int iterations=1;
@@ -225,10 +234,10 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 
 	for(int i=0;i<xLength;i++)
 	{
-		gammatDotN[0][i]=0;
+		gammatDotN[i]=0;
 		for(int j=0;j<xLength;j++)
 		{
-			gammatDotN[0][i]+=gamma[j]*N[i][j];//This is gammatDotN transpose
+			gammatDotN[i]+=gamma[j]*N[i][j];//This is gammatDotN transpose
 		}
 
 	}
@@ -237,7 +246,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	gammatDotNDotGamma=0;
 	for(int i=0;i<xLength;i++)
 	{
-		gammatDotNDotGamma+=gammatDotN[0][i]*gamma[i];
+		gammatDotNDotGamma+=gammatDotN[i]*gamma[i];
 	}
 
 	//Calculate the first term
@@ -251,7 +260,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 		for(int j=0;j<xLength;j++)
 		{
 			FirstSecond[i][j]=((deltaX[j]*deltaX[i])/bottom)*firstTerm;
-			deltaXDotGammatDotN[i][j]=deltaX[i]*gammatDotN[0][j];
+			deltaXDotGammatDotN[i][j]=deltaX[i]*gammatDotN[j];
 			gammatDotDeltaXt[i][j]=gamma[i]*deltaX[j];
 		}
 	}
@@ -438,6 +447,33 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	cout<<"Fnew: "<<fnew<<endl;
 	cout<<"Number of Iterations: "<<iterations<<endl;
 	cout<<"Number of function calls: "<<ftimes<<endl;
+
+		for(int i=0; i < xLength; i++)
+	{
+		FirstSecond[i] = new double[xLength];
+		deltaXDotGammatDotN[i] = new double[xLength];
+		gammatDotDeltaXt[i] = new double[xLength];
+		NDotGammaDotDeltaXt[i] = new double[xLength];
+	}
+	delete s;
+	for(int i=0; i < xLength; i++)
+	{
+		delete N[i];
+		delete FirstSecond[i];
+		delete deltaXDotGammatDotN[i]; 
+		delete gammatDotDeltaXt[i];
+		delete NDotGammaDotDeltaXt[i];
+	
+	}
+	delete N;
+	delete FirstSecond;
+	delete deltaXDotGammatDotN; 
+	delete gammatDotDeltaXt;
+	delete NDotGammaDotDeltaXt;
+
+	delete grad;
+	delete xold;
+	delete gammatDotN;
 
 	///End of function
 	if(fnew<validSolution) return succsess;
