@@ -15,7 +15,7 @@
 
 using namespace std;
 
-int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine)
+int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
 	double convergence;
 	if(isFine>0) convergence = XconvergenceFine;
@@ -37,11 +37,11 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	norm = 0;
 	for(int j=0;j<xLength;j++)
 	{
-		x[j]= x[j]+pert;
+		*x[j]= *x[j]+pert;
 		grad[j]=(calc(cons,consLength)-f0)/pert;
 		ftimes++;
 		cout<<"gradient: "<<grad[j]<<endl;
-		x[j]-=pert;
+		*x[j]-=pert;
 		norm = norm+(grad[j]*grad[j]);
 	}
 	norm = sqrt(norm);
@@ -75,7 +75,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	double fold;
 	for(int i=0;i<xLength;i++)
 	{
-		xold[i]=x[i];//Copy last values to xold
+		xold[i]=*x[i];//Copy last values to xold
 	}
 
 	///////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	alpha2=1;
 	for(int i=0;i<xLength;i++)
 	{
-		x[i]=xold[i]+alpha2*s[i];//calculate the new x
+		*x[i]=xold[i]+alpha2*s[i];//calculate the new x
 	}
 	f2 = calc(cons,consLength);
 	ftimes++;
@@ -99,7 +99,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	alpha3 = alpha*2;
 	for(int i=0;i<xLength;i++)
 	{
-		x[i]=xold[i]+alpha3*s[i];//calculate the new x
+		*x[i]=xold[i]+alpha3*s[i];//calculate the new x
 	}
 	f3=calc(cons,consLength);
 	ftimes++;
@@ -117,7 +117,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 			alpha2=alpha2/2;
 			for(int i=0;i<xLength;i++)
 			{
-				x[i]=xold[i]+alpha2*s[i];//calculate the new x
+				*x[i]=xold[i]+alpha2*s[i];//calculate the new x
 			}
 			f2=calc(cons,consLength);
 			ftimes++;
@@ -132,7 +132,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 			alpha3=alpha3*2;
 			for(int i=0;i<xLength;i++)
 			{
-				x[i]=xold[i]+alpha3*s[i];//calculate the new x
+				*x[i]=xold[i]+alpha3*s[i];//calculate the new x
 			}
 			f3=calc(cons,consLength);
 			ftimes++;
@@ -148,7 +148,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
 	{
-		x[i]=xold[i]+alphaStar*s[i];//calculate the new x
+		*x[i]=xold[i]+alphaStar*s[i];//calculate the new x
 	}
 	fnew=calc(cons,consLength);
 	ftimes++;
@@ -201,7 +201,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	///Calculate deltaX
 	for(int i=0;i<xLength;i++)
 	{
-		deltaX[i]=x[i]-xold[i];//Calculate the difference in x for the Hessian update
+		deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the Hessian update
 	}
 
 	while(deltaXnorm>convergence && fnew>smallF)
@@ -215,10 +215,10 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	for(int i=0;i<xLength;i++)
 	{
 		//Calculate the new gradient vector
-		x[i]=x[i]+pert;
+		*x[i]=*x[i]+pert;
 		gradnew[i]=(calc(cons,consLength)-fnew)/pert;
 		ftimes++;
-		x[i]=x[i]-pert;
+		*x[i]=*x[i]-pert;
 		//Calculate the change in the gradient
 		gamma[i]=gradnew[i]-grad[i];
 		bottom+=deltaX[i]*gamma[i];
@@ -307,7 +307,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	//copy newest values to the xold
 	for(int i=0;i<xLength;i++)
 	{
-		xold[i]=x[i];//Copy last values to xold
+		xold[i]=*x[i];//Copy last values to xold
 	}
 	steps=0;
 
@@ -323,7 +323,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	alpha2=1;
 	for(int i=0;i<xLength;i++)
 	{
-		x[i]=xold[i]+alpha2*s[i];//calculate the new x
+		*x[i]=xold[i]+alpha2*s[i];//calculate the new x
 	}
 	f2 = calc(cons,consLength);
 	ftimes++;
@@ -332,7 +332,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	alpha3 = alpha2*2;
 	for(int i=0;i<xLength;i++)
 	{
-		x[i]=xold[i]+alpha3*s[i];//calculate the new x
+		*x[i]=xold[i]+alpha3*s[i];//calculate the new x
 	}
 	f3=calc(cons,consLength);
 	ftimes++;
@@ -351,7 +351,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 			alpha2=alpha2/2;
 			for(int i=0;i<xLength;i++)
 			{
-				x[i]=xold[i]+alpha2*s[i];//calculate the new x
+				*x[i]=xold[i]+alpha2*s[i];//calculate the new x
 			}
 			f2=calc(cons,consLength);
 			ftimes++;
@@ -366,7 +366,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 			alpha3=alpha3*2;
 			for(int i=0;i<xLength;i++)
 			{
-				x[i]=xold[i]+alpha3*s[i];//calculate the new x
+				*x[i]=xold[i]+alpha3*s[i];//calculate the new x
 			}
 			f3=calc(cons,consLength);
 			ftimes++;
@@ -404,7 +404,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
 	{
-		x[i]=xold[i]+alphaStar*s[i];//calculate the new x
+		*x[i]=xold[i]+alphaStar*s[i];//calculate the new x
 	}
 	fnew=calc(cons,consLength);
 	ftimes++;
@@ -427,7 +427,7 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	deltaXnorm=0;
 	for(int i=0;i<xLength;i++)
 	{
-		deltaX[i]=x[i]-xold[i];//Calculate the difference in x for the hessian update
+		deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the hessian update
 		deltaXnorm+=deltaX[i]*deltaX[i];
 		grad[i]=gradnew[i];
 	}
@@ -448,13 +448,6 @@ int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine
 	cout<<"Number of Iterations: "<<iterations<<endl;
 	cout<<"Number of function calls: "<<ftimes<<endl;
 
-		for(int i=0; i < xLength; i++)
-	{
-		FirstSecond[i] = new double[xLength];
-		deltaXDotGammatDotN[i] = new double[xLength];
-		gammatDotDeltaXt[i] = new double[xLength];
-		NDotGammaDotDeltaXt[i] = new double[xLength];
-	}
 	delete s;
 	for(int i=0; i < xLength; i++)
 	{
