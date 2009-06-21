@@ -209,7 +209,16 @@ int main() {
 
 	int sol;
 
-	sol=solve(parameters ,28,cons,13,fine);
+
+
+	double  *pparameters[100];
+
+	for(i=0;i<100;i++)
+	{
+		pparameters[i] = &parameters[i];
+	}
+
+	sol=solve(pparameters ,28,cons,13,fine);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;
