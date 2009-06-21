@@ -8,6 +8,8 @@
  */
 #include <iostream>
 
+#define DEBUG
+
 #ifndef WIN32
 	#define _hypot hypot
 #endif
@@ -64,7 +66,8 @@
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pert              1e-11
+#define pertMag           1e-5
+#define pertMin			  1e-11
 #define XconvergenceRough 1e-4
 #define XconvergenceFine  1e-12
 #define smallF            1e-20

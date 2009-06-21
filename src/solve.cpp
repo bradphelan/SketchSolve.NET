@@ -17,7 +17,7 @@ using namespace std;
 
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
-	double convergence;
+	double convergence,pert ;
 	//Save the original parameters for later.
 	double *origSolution = new double[xLength];
 	for(int i=0;i<xLength;i++)
@@ -42,6 +42,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	double norm; //The norm of the gradient vector
 	double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
 	norm = 0;
+	pert = f0*pertMag;
 	for(int j=0;j<xLength;j++)
 	{
 		*x[j]= *x[j]+pert;
@@ -218,7 +219,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//////////////////////////////////////////////////////////////////////
 	bottom=0;
 	deltaXtDotGamma = 0;
-
+	pert = fnew*pertMag;
+	if(pert<pertMin) pert = pertMin;
 	for(int i=0;i<xLength;i++)
 	{
 		//Calculate the new gradient vector
