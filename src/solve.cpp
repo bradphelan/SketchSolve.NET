@@ -453,14 +453,14 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	{
 		delete N[i];
 		delete FirstSecond[i];
-		delete deltaXDotGammatDotN[i]; 
+		delete deltaXDotGammatDotN[i];
 		delete gammatDotDeltaXt[i];
 		delete NDotGammaDotDeltaXt[i];
-	
+
 	}
 	delete N;
 	delete FirstSecond;
-	delete deltaXDotGammatDotN; 
+	delete deltaXDotGammatDotN;
 	delete gammatDotDeltaXt;
 	delete NDotGammaDotDeltaXt;
 
@@ -782,7 +782,7 @@ double calc(constraint * cons, int consLength)
 			dx2=dx2/hyp2;
 			dy2=dy2/hyp2;
 
-			temp = dx*dx2-dy*dy2;
+			temp = dx*dx2+dy*dy2;
 			error += (temp)*(temp);
 		}
 		// Colinear constraint
