@@ -18,6 +18,13 @@ using namespace std;
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
 	double convergence;
+	//Save the original parameters for later.
+	double *origSolution = new double[xLength];
+	for(int i=0;i<xLength;i++)
+	{
+		origSolution[i]=*x[i];
+	}
+
 	if(isFine>0) convergence = XconvergenceFine;
 	else convergence = XconvergenceRough;
 	//integer to keep track of how many times calc is called
@@ -473,8 +480,20 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	delete gammatDotN;
 
 	///End of function
-	if(fnew<validSolution) return succsess;
-	else return noSolution;
+	if(fnew<validSolution)
+		{
+		return succsess;
+		}
+	else
+		{
+		return noSolution;
+		//Replace the bad numbers with the last result
+		for(int i=0;i<xLength;i++)
+		{
+			*x[i]=origSolution[i];
+		}
+		}
+
 }
 
 
