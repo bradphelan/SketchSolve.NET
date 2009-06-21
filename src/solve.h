@@ -8,8 +8,6 @@
  */
 #include <iostream>
 
-#define DEBUG
-
 #ifndef WIN32
 	#define _hypot hypot
 #endif
@@ -66,7 +64,7 @@
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pertMag           1e-5
+#define pertMag           1e-11
 #define pertMin			  1e-11
 #define XconvergenceRough 1e-4
 #define XconvergenceFine  1e-12
@@ -74,7 +72,7 @@
 #define validSolution     1e-12
 #define rough             0
 #define fine              1
-#define MaxIterations	  10000
+#define MaxIterations	  50 //Note that the total number of iterations allowed is MaxIterations *xLength
 
 ///////////////////////////////////////
 /// Solve exit codes
