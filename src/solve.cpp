@@ -204,7 +204,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the Hessian update
 	}
 
-	while(deltaXnorm>convergence && fnew>smallF)
+	while(deltaXnorm>convergence && fnew>smallF && iterations<MaxIterations)
 	{
 	//////////////////////////////////////////////////////////////////////
 	///Start of main loop!!!!
