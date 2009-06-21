@@ -40,7 +40,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		*x[j]= *x[j]+pert;
 		grad[j]=(calc(cons,consLength)-f0)/pert;
 		ftimes++;
-		cout<<"gradient: "<<grad[j]<<endl;
+		//cout<<"gradient: "<<grad[j]<<endl;
 		*x[j]-=pert;
 		norm = norm+(grad[j]*grad[j]);
 	}
@@ -439,6 +439,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	}
 	////Debug
 
+#ifdef DEBUG
+
 	for(int i=0;i<xLength;i++)
 	{
 		cout<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
@@ -447,6 +449,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	cout<<"Fnew: "<<fnew<<endl;
 	cout<<"Number of Iterations: "<<iterations<<endl;
 	cout<<"Number of function calls: "<<ftimes<<endl;
+
+#endif
 
 	delete s;
 	for(int i=0; i < xLength; i++)
