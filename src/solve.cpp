@@ -32,7 +32,6 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//Calculate Function at the starting point:
 	double f0;
 	f0 = calc(cons,consLength);
-	cout<<"f0: "<<f0<<endl;
 	if(f0<smallF) return succsess;
 	ftimes++;
 	//Calculate the gradient at the starting point:
@@ -53,7 +52,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		second = calc(cons,consLength);
 		grad[j]=.5*(second-first)/pert;
 		ftimes++;
+#ifdef DEBUG
 		cout<<"gradient: "<<grad[j]<<endl;
+#endif
 		*x[j]=temper;
 		norm = norm+(grad[j]*grad[j]);
 	}
