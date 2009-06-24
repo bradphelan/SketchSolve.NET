@@ -426,7 +426,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	{
 		alphaStar=alpha2;
 	}
-	if(isnan(alphaStar)) alphaStar=0;
+	if(alphaStar!=alphaStar) alphaStar=0;
 
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
@@ -507,12 +507,13 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		}
 	else
 		{
-		return noSolution;
+
 		//Replace the bad numbers with the last result
 		for(int i=0;i<xLength;i++)
 		{
 			*x[i]=origSolution[i];
 		}
+		return noSolution;
 		}
 
 }
