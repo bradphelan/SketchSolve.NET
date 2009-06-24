@@ -390,7 +390,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 			f3=calc(cons,consLength);
 			ftimes++;
 		}
-		if(steps==4)
+		/* this should be deleted soon!!!!
+		if(steps==-4)
 			{
 				alpha2=1;
 				alpha3=2;
@@ -408,17 +409,24 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 					}
 				}
 			}
+		*/
+		if(steps>100)
+			{
+			continue;
+			}
 		steps=steps+1;
 	}
 
 	// get the alpha for the minimum f of the quadratic approximation
 	alphaStar= alpha2+((alpha2-alpha1)*(f1-f3))/(3*(f1-2*f2+f3));
 
+
 	//Guarantee that the new alphaStar is within the bracket
-	if(alphaStar>alpha3 || alphaStar<alpha1)
+	if(alphaStar>=alpha3 || alphaStar<=alpha1)
 	{
 		alphaStar=alpha2;
 	}
+	if(isnan(alphaStar)) alphaStar=0;
 
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
@@ -523,6 +531,7 @@ double calc(constraint * cons, int consLength)
 			error += (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y);
 		}
 
+
 		if(cons[i].type==P2PDistance)
 		{
 			error+= (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
@@ -602,7 +611,7 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==horizontal)
 		{
 			temp= (L1_P1_y-L1_P2_y);
-			error+=temp*temp*10;
+			error+=temp*temp*100;
 		}
 
 		if(cons[i].type==vertical)
