@@ -12,11 +12,13 @@
 #include "solve.h"
 #include <cmath>
 #include <stdlib.h>
+#include <sstream>
 
 using namespace std;
 
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
+	std::stringstream cstr;
 	double convergence,pert ;
 	//Save the original parameters for later.
 	double *origSolution = new double[xLength];
@@ -53,7 +55,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		grad[j]=.5*(second-first)/pert;
 		ftimes++;
 #ifdef DEBUG
-		cout<<"gradient: "<<grad[j]<<endl;
+		cstr << "gradient: " << grad[j];
+		debugprint(cstr.str());
+		cstr.clear();
 #endif
 		*x[j]=temper;
 		norm = norm+(grad[j]*grad[j]);
@@ -73,9 +77,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 			if(i==j)
 			{
 				//N[i][j]=norm; //Calculate a scaled identity matrix as a Hessian inverse estimate
-				N[i][j]=grad[i]/norm;
-				if(N[i][j]<0) N[i][j]=-N[i][j];
-				s[i]=-grad[i]/norm; //Calculate the initial search vector
+				//N[i][j]=grad[i]/(norm+.001);
+				N[i][j]=1;
+				s[i]=-grad[i]; //Calculate the initial search vector
 
 			}
 			else N[i][j]=0;
@@ -159,6 +163,10 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//Guarantee that the new alphaStar is within the bracket
 	if(alphaStar>alpha3 || alphaStar<alpha1) alphaStar=alpha2;
 
+	if(alphaStar!=alphaStar)
+	{
+		alphaStar=.001;//Fix nan problem
+	}
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
 	{
@@ -410,10 +418,12 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 				}
 			}
 		*/
+		/*
 		if(steps>100)
 			{
 			continue;
 			}
+		*/
 		steps=steps+1;
 	}
 
@@ -466,16 +476,19 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	}
 	////Debug
 
+
 #ifdef DEBUG
 
 	for(int i=0;i<xLength;i++)
 	{
-		cout<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
+		cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
 		//cout<<xold[i]<<endl;
 	}
-	cout<<"Fnew: "<<fnew<<endl;
-	cout<<"Number of Iterations: "<<iterations<<endl;
-	cout<<"Number of function calls: "<<ftimes<<endl;
+	cstr<<"Fnew: "<<fnew<<endl;
+	cstr<<"Number of Iterations: "<<iterations<<endl;
+	cstr<<"Number of function calls: "<<ftimes<<endl;
+	debugprint(cstr.str());
+	cstr.clear();
 
 #endif
 
@@ -501,6 +514,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	delete gammatDotN;
 
 	///End of function
+	double validSolution;
+	if(isFine==1) validSolution=validSolutionFine;
+	else validSolution=validSoltuionRough;
 	if(fnew<validSolution)
 		{
 		return succsess;
@@ -609,16 +625,37 @@ double calc(constraint * cons, int consLength)
 		}
 
 
-		if(cons[i].type==horizontal)
-		{
-			temp= (L1_P1_y-L1_P2_y);
-			error+=temp*temp*100;
-		}
-
 		if(cons[i].type==vertical)
 		{
-			temp=(L1_P1_x-L1_P2_x);
-			error+=temp*temp*10;
+			double odx = L1_P2_x - L1_P1_x;
+			/*
+			double ody = L1_P2_y - L1_P1_y;
+
+			double hyp=_hypot(odx,ody);
+			dx = odx/hyp;
+			dy = ody/hyp;
+
+			double theta = atan2(dy,dx);
+			double p1 = odx-cos(theta)*cos(theta)*ody;
+			error+=p1*p1*10;
+			*/
+			error+=odx*odx*1000;
+		}
+
+		if(cons[i].type==horizontal)
+		{
+			//double odx = L1_P2_x - L1_P1_x;
+			double ody = L1_P2_y - L1_P1_y;
+			/*
+			double hyp=_hypot(odx,ody);
+			dx = odx/hyp;
+			dy = ody/hyp;
+
+			double theta = atan2(dy,dx);
+			double p1 = (ody-sin(theta)*sin(theta)*odx);
+			error+=p1*p1*10;
+			*/
+			error+=ody*ody*1000;
 		}
 
 		if(cons[i].type==tangentToCircle)
@@ -648,57 +685,73 @@ double calc(constraint * cons, int consLength)
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
+
 			hyp=_hypot(dx,dy);
 
-			rad=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			Rpx=A1_Center_x - dy / hyp * rad;
-			Rpy=A1_Center_y + dx / hyp * rad;
-			RpxN=A1_Center_x + dy / hyp * rad;
-			RpyN=A1_Center_y - dx / hyp * rad;
+			double u = (A1_Center_x - L1_P1_x) * (L1_P2_x - L1_P1_x) + (A1_Center_y - L1_P1_y) * (L1_P2_y - L1_P1_y);
+			u/=hyp*hyp;
 
-			m=dy / dx;
-			n=dx / dy;
-			if(m<=1 && m>=-1)
-			{
-				Ey=L1_P1_y + m * (Rpx - L1_P1_x);
-				error1=(Ey - Rpy) * (Ey - Rpy);
-				Ey=L1_P1_y + m * (RpxN - L1_P1_x);
-				error2=(Ey - RpyN) * (Ey - RpyN);
-			}
-			else
-			{
-				Ex=L1_P1_x + n * (Rpy - L1_P1_y);
-				error1=(Ex - Rpx) * (Ex - Rpx);
-				Ex=L1_P1_x + n * (RpyN - L1_P1_y);
-				error2=(Ex - RpxN) * (Ex - RpxN);
-			}
-			if(error1<error2)
-			{
-				error+=error1;
-				//cout<<"error: "<<error1<<endl;
-			}
-			else
-			{
-				error+=error2;
-				//cout<<"error: "<<error2<<endl;
-			}
+			double x = L1_P1_x + u *(L1_P2_x - L1_P1_x);
+			double y = L1_P1_y + u *(L1_P2_y - L1_P1_y);
+
+			double dcsx = A1_Center_x - A1_Start_x;
+			double dcsy = A1_Center_y - A1_Start_y;
+			double dcex = A1_Center_x - A1_End_x;
+			double dcey = A1_Center_y - A1_End_y;
+			rad=(dcsx*dcsx + dcsy * dcsy);
+		//	rad+=(dcex*dcex + dcey * dcey)/4;
+
+			double dcx = A1_Center_x-x;
+			double dcy = A1_Center_y-y;
+			temp = (dcx * dcx + dcy * dcy) - rad;
+			error += temp*temp*100;
 			*/
 
-			temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
+//#if defined(NEWARC)
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+
+
+			double Xint,Yint,radsq;
+			radsq = (A1_Center_x-A1_Start_x)*(A1_Center_x-A1_Start_x)+(A1_Center_y-A1_Start_y)*(A1_Center_y-A1_Start_y);
+			t=-(L1_P1_x*dx-A1_Center_x*dx+L1_P1_y*dy-A1_Center_y*dy)/(dx*dx+dy*dy);
+			Xint=L1_P1_x+dx*t;
+			Yint=L1_P1_y+dy*t;
+			temp= (A1_Center_x - Xint)*(A1_Center_x - Xint)+(A1_Center_y - Yint)*(A1_Center_y - Yint) - radsq;
 			error += temp*temp;
 		}
 
 		if(cons[i].type==arcRules)
 		{
-			rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
-			error += (rad1-rad2)*(rad1-rad2);
-			}
+			//rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			//rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
+			//error += (rad1-rad2)*(rad1-rad2);
+			//double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
+			//dx = A1_End_x - A1_Start_x;
+			//dy = A1_End_y - A1_Start_y;
+
+			//hyp=_hypot(dx,dy);
+
+			//double u = (A1_Center_x - A1_Start_x) * (A1_End_x - A1_Start_x) + (A1_Center_y - A1_Start_y) * (A1_End_y - A1_Start_y);
+			//u/=hyp*hyp;
+
+			//temp = sin(u - .5);
+			//error+=temp*temp*temp*temp*100000;
+			//error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2));
+			double a1endx2 = A1_End_x * A1_End_x;
+			double a1endy2 = A1_End_y * A1_End_y;
+			double a1startx2 = A1_Start_x*A1_Start_x;
+			double a1starty2 = A1_Start_y*A1_Start_y;
+			double num = -2*A1_Center_x*A1_End_x+a1endx2-2*A1_Center_y*A1_End_y+a1endy2+2*A1_Center_x*A1_Start_x-a1startx2+2*A1_Center_y*A1_Start_y-a1starty2;
+			error += num * num /(4.*a1endx2+a1endy2-2*A1_End_x*A1_Start_x+a1startx2-2*A1_End_y*A1_Start_y+a1starty2);
+
+		}
 
 		if(cons[i].type==lineLength)
 		{
-			temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
-			error += temp*temp;
+			temp= sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
+			//temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
+			error += temp*temp*100;
 		}
 
 		if(cons[i].type==equalLegnth)
@@ -744,7 +797,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==concentricCircles)
 		{
-			temp = pow(_hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y),2);
+			temp = _hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y);
 			error += temp*temp;
 		}
 
