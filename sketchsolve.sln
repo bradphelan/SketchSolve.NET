@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sketchsolve", "sketchsolve.vcxproj", "{9E52E808-ABB8-4329-9876-FC686B0AFF81}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SketchSolveCLR", "SketchSolveCLR\SketchSolveCLR.vcxproj", "{0DD5CAC1-CC91-4E73-B820-A4E45027916F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9E52E808-ABB8-4329-9876-FC686B0AFF81} = {9E52E808-ABB8-4329-9876-FC686B0AFF81}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +18,10 @@ Global
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Debug|Win32.Build.0 = Debug|Win32
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Release|Win32.ActiveCfg = Release|Win32
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Release|Win32.Build.0 = Release|Win32
+		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Debug|Win32.Build.0 = Debug|Win32
+		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Release|Win32.ActiveCfg = Release|Win32
+		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
