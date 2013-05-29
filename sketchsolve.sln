@@ -8,6 +8,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SketchSolveCLR", "SketchSol
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81} = {9E52E808-ABB8-4329-9876-FC686B0AFF81}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E1685222-9F73-4974-A207-431F71F6DFEE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SketchSolve.CLR.Spec", "SketchSolve.CLR.Spec\SketchSolve.CLR.Spec.vcxproj", "{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -22,6 +26,10 @@ Global
 		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Debug|Win32.Build.0 = Debug|Win32
 		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Release|Win32.ActiveCfg = Release|Win32
 		{0DD5CAC1-CC91-4E73-B820-A4E45027916F}.Release|Win32.Build.0 = Release|Win32
+		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Debug|Win32.Build.0 = Debug|Win32
+		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Release|Win32.ActiveCfg = Release|Win32
+		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

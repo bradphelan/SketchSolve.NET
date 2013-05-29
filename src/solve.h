@@ -10,6 +10,9 @@
 
 #ifndef WIN32
 	#define _hypot hypot
+    #define DllExport
+#else
+    #define DllExport   __declspec(dllexport) 
 #endif
 
 #define DEBUG
@@ -228,8 +231,8 @@ public:
 void debugprint(std::string s);
 
 //Function Prototypes
-int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
-double calc(constraint * cons, int consLength);
-void derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength);
+DllExport int __cdecl solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
+DllExport double __cdecl calc(constraint * cons, int consLength);
+DllExport void __cdecl derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength);
 
 #endif /* SOLVE_H_ */
