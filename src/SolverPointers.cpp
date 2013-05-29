@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <string>
 #include "solve.h"
 using namespace std;
 
