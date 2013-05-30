@@ -847,7 +847,7 @@ public static double calc(constraint [] cons)
          dx = odx/hyp;
          dy = ody/hyp;
 
-         double theta = atan2(dy,dx);
+         double theta = Math.Atan2(dy,dx);
          double p1 = odx-Math.Cos(theta)*Math.Cos(theta)*ody;
          error+=p1*p1*10;
          */
@@ -863,7 +863,7 @@ public static double calc(constraint [] cons)
          dx = odx/hyp;
          dy = ody/hyp;
 
-         double theta = atan2(dy,dx);
+         double theta = Math.Atan2(dy,dx);
          double p1 = (ody-Math.Sin(theta)*Math.Sin(theta)*odx);
          error+=p1*p1*10;
          */
@@ -1160,8 +1160,8 @@ public static double calc(constraint [] cons)
     if(cons[i].type == ConstraintEnum.pointOnArcMidpoint)
     {
       rad1=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
-      temp = atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
-      temp2= atan2(A1_End_y-A1_Center_y,A1_End_x-A1_Center_x);
+      temp = Math.Atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
+      temp2= Math.Atan2(A1_End_y-A1_Center_y,A1_End_x-A1_Center_x);
       Ex=A1_Center_x+rad1*Math.Cos((temp2+temp)/2);
       Ey=A1_Center_y+rad1*Math.Sin((temp2+temp)/2);
       temp = (Ex-P1_x);
