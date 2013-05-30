@@ -184,6 +184,7 @@ namespace SketchSolveC
     public static Result solve(Parameter []x, constraint[] cons, int isFine)
     {
       int xLength = x.Length;
+      int consLength = cons.Length;
       double convergence,pert ;
       //Save the original parameters for later.
       var origSolution = new double[xLength];
@@ -198,7 +199,7 @@ namespace SketchSolveC
       int ftimes=0;
       //Calculate Function at the starting point:
       double f0;
-      f0 = calc(cons,consLength);
+      f0 = calc(cons);
       if(f0<smallF) return succsess;
       ftimes++;
       //Calculate the gradient at the starting point:
@@ -214,9 +215,9 @@ namespace SketchSolveC
       {
         temper= *x[j];
         *x[j]= temper-pert;
-        first = calc(cons,consLength);
+        first = calc(cons);
         *x[j]= temper+pert;
-        second = calc(cons,consLength);
+        second = calc(cons);
         grad[j]=.5*(second-first)/pert;
         ftimes++;
         /*
@@ -277,7 +278,7 @@ cstr.clear();
       {
         x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
       }
-      f2 = calc(cons,consLength);
+      f2 = calc(cons);
       ftimes++;
 
       //Take a step of alpha 3 that is 2*alpha2
@@ -286,7 +287,7 @@ cstr.clear();
       {
         x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
       }
-      f3=calc(cons,consLength);
+      f3=calc(cons);
       ftimes++;
 
       //Now reduce or lengthen alpha2 and alpha3 until the minimum is
@@ -304,7 +305,7 @@ cstr.clear();
           {
             x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
           }
-          f2=calc(cons,consLength);
+          f2=calc(cons);
           ftimes++;
         }
 
@@ -319,7 +320,7 @@ cstr.clear();
           {
             x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
           }
-          f3=calc(cons,consLength);
+          f3=calc(cons);
           ftimes++;
 
         }
@@ -339,7 +340,7 @@ cstr.clear();
       {
         x[i].Value=xold[i]+alphaStar*s[i];//calculate the new x
       }
-      fnew=calc(cons,consLength);
+      fnew=calc(cons);
       ftimes++;
       fold=fnew;
       /*
@@ -407,9 +408,9 @@ cstr.clear();
           //Calculate the new gradient vector
           temper=x[i].Value;
           x[i].Value=temper-pert;
-          first = calc(cons,consLength);
+          first = calc(cons);
           x[i].Value=temper+pert;
-          second= calc(cons,consLength);
+          second= calc(cons);
           gradnew[i]=.5*(second-first)/pert;
           ftimes++;
           x[i].Value=temper;
@@ -519,7 +520,7 @@ cstr.clear();
         {
           x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
         }
-        f2 = calc(cons,consLength);
+        f2 = calc(cons);
         ftimes++;
 
         //Take a step of alpha 3 that is 2*alpha2
@@ -528,7 +529,7 @@ cstr.clear();
         {
           x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
         }
-        f3=calc(cons,consLength);
+        f3=calc(cons);
         ftimes++;
 
         //Now reduce or lengthen alpha2 and alpha3 until the minimum is
@@ -547,7 +548,7 @@ cstr.clear();
             {
               x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
             }
-            f2=calc(cons,consLength);
+            f2=calc(cons);
             ftimes++;
           }
 
@@ -562,7 +563,7 @@ cstr.clear();
             {
               x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
             }
-            f3=calc(cons,consLength);
+            f3=calc(cons);
             ftimes++;
           }
           /* this should be deleted soon!!!!
@@ -610,7 +611,7 @@ cstr.clear();
         {
           x[i].Value=xold[i]+alphaStar*s[i];//calculate the new x
         }
-        fnew=calc(cons,consLength);
+        fnew=calc(cons);
         ftimes++;
 
         /*
