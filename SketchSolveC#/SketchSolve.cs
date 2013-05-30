@@ -180,6 +180,10 @@ namespace SketchSolveC
     //Note that the total number of iterations allowed is MaxIterations *xLength;
     const double MaxIterations = 50 ;
 
+    static double _hypot(double a, double b){
+      return Math.Sqrt(a*a+b*b);
+    }
+
 
     public static Result solve(Parameter []x, constraint[] cons, int isFine)
     {
@@ -230,7 +234,7 @@ cstr.clear();
         x[j].Value=temper;
         norm = norm+(grad[j]*grad[j]);
       }
-      norm = sqrt(norm);
+      norm = Math.Sqrt(norm);
       //Estimate the norm of N
 
       //Initialize N and calculate s
@@ -636,7 +640,7 @@ cstr.clear();
           deltaXnorm+=deltaX[i]*deltaX[i];
           grad[i]=gradnew[i];
         }
-        deltaXnorm=sqrt(deltaXnorm);
+        deltaXnorm=Math.Sqrt(deltaXnorm);
         iterations++;
         /////////////////////////////////////////////////////////////
         ///End of Main loop
@@ -894,7 +898,7 @@ public static double calc(constraint [] cons)
 
     if(cons[i].type==lineLength)
     {
-      temp= sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
+      temp= Math.Sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
       //temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
       error += temp*temp*100;
     }
