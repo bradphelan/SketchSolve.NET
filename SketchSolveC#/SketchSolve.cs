@@ -1130,7 +1130,7 @@ public static double calc(constraint [] cons)
       }
     }
     // Point on a circle
-    if(cons[i].type == pointOnCircle)
+    if(cons[i].type == ConstraintEnum.pointOnCircle)
     {
       //see what the current radius to the point is
       rad1=_hypot(C1_Center_x-P1_x,C1_Center_y-P1_y);
@@ -1139,7 +1139,7 @@ public static double calc(constraint [] cons)
       error += temp*temp;
       //cout<<"Point On circle error"<<temp*temp<<endl;
     }
-    if(cons[i].type == pointOnArc)
+    if(cons[i].type == ConstraintEnum.pointOnArc)
     {
       //see what the current radius to the point is
       rad1=_hypot(A1_Center_x-P1_x,A1_Center_y-P1_y);
@@ -1149,7 +1149,7 @@ public static double calc(constraint [] cons)
       error += temp*temp;
       //cout<<"Point On circle error"<<temp*temp<<endl;
     }
-    if(cons[i].type == pointOnLineMidpoint)
+    if(cons[i].type == ConstraintEnum.pointOnLineMidpoint)
     {
       Ex=(L1_P1_x+L1_P2_x)/2;
       Ey=(L1_P1_y+L1_P2_y)/2;
@@ -1157,7 +1157,7 @@ public static double calc(constraint [] cons)
       temp2 = Ey-P1_y;
       error += temp*temp+temp2*temp2;
     }
-    if(cons[i].type == pointOnArcMidpoint)
+    if(cons[i].type == ConstraintEnum.pointOnArcMidpoint)
     {
       rad1=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
       temp = atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
@@ -1169,7 +1169,7 @@ public static double calc(constraint [] cons)
       error += temp*temp+temp2*temp2;
     }
 
-    if(cons[i].type == pointOnCircleQuad)
+    if(cons[i].type == ConstraintEnum.pointOnCircleQuad)
     {
       Ex=C1_Center_x;
       Ey=C1_Center_y;
@@ -1191,7 +1191,7 @@ public static double calc(constraint [] cons)
       temp2 = (Ey-P1_y);
       error += temp*temp+temp2*temp2;
     }
-    if(cons[i].type == symmetricPoints)
+    if(cons[i].type == ConstraintEnum.symmetricPoints)
     {
       dx=Sym_P2_x-Sym_P1_x;
       dy=Sym_P2_y-Sym_P1_y;
@@ -1202,7 +1202,7 @@ public static double calc(constraint [] cons)
       temp2 = (Ey-P2_y);
       error += temp*temp+temp2*temp2;
     }
-    if(cons[i].type == symmetricLines)
+    if(cons[i].type == ConstraintEnum.symmetricLines)
     {
       dx=Sym_P2_x-Sym_P1_x;
       dy=Sym_P2_y-Sym_P1_y;
@@ -1219,7 +1219,7 @@ public static double calc(constraint [] cons)
       temp2 = (Ey-L2_P2_y);
       error += temp*temp+temp2*temp2;
     }
-    if(cons[i].type == symmetricCircles)
+    if(cons[i].type == ConstraintEnum.symmetricCircles)
     {
       dx=Sym_P2_x-Sym_P1_x;
       dy=Sym_P2_y-Sym_P1_y;
@@ -1232,7 +1232,7 @@ public static double calc(constraint [] cons)
       temp = (C1_rad-C2_rad);
       error += temp*temp;
     }
-    if(cons[i].type == symmetricArcs)
+    if(cons[i].type == ConstraintEnum.symmetricArcs)
     {
       dx=Sym_P2_x-Sym_P1_x;
       dy=Sym_P2_y-Sym_P1_y;
