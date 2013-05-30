@@ -95,14 +95,14 @@ namespace SketchSolveC
 #define A2_Center_x    *cons[i].arc2.center.x
 #define A2_Center_y    *cons[i].arc2.center.y
 
-#define A1_Start_x     (A1_Center_x+A1_radius*cos(A1_startA))
-#define A1_Start_y     (A1_Center_y+A1_radius*sin(A1_startA))
-#define A1_End_x       (A1_Center_x+A1_radius*cos(A1_endA))
-#define A1_End_y     (A1_Center_y+A1_radius*sin(A1_endA))
-#define A2_Start_x     (A1_Center_x+A2_radius*cos(A2_startA))
-#define A2_Start_y     (A1_Center_y+A2_radius*sin(A2_startA))
-#define A2_End_x       (A1_Center_x+A2_radius*cos(A2_endA))
-#define A2_End_y     (A1_Center_y+A2_radius*sin(A2_endA))
+#define A1_Start_x     (A1_Center_x+A1_radius*Math.Cos(A1_startA))
+#define A1_Start_y     (A1_Center_y+A1_radius*Math.Sin(A1_startA))
+#define A1_End_x       (A1_Center_x+A1_radius*Math.Cos(A1_endA))
+#define A1_End_y     (A1_Center_y+A1_radius*Math.Sin(A1_endA))
+#define A2_Start_x     (A1_Center_x+A2_radius*Math.Cos(A2_startA))
+#define A2_Start_y     (A1_Center_y+A2_radius*Math.Sin(A2_startA))
+#define A2_End_x       (A1_Center_x+A2_radius*Math.Cos(A2_endA))
+#define A2_End_y     (A1_Center_y+A2_radius*Math.Sin(A2_endA))
 
 
 #define length       *cons[i].parameter
@@ -135,8 +135,9 @@ namespace SketchSolveC
 
   public class arc
   {
-    public point start = null;
-    public point end = null;
+    public Parameter startAngle = null;
+    public Parameter endAngle = null;
+    public Parameter rad = null;
     public point center = null;
   }
 
@@ -691,8 +692,69 @@ public static double calc(constraint [] cons)
   int consLength=cons.Length;
   double error=0;
   double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,Xint,Yint,dx2,dy2,hyp1,hyp2,temp2;
+
+
+
+
   for(int i=0;i<consLength;i++)
   {
+
+
+      // Crappy hack but it will get us going
+      double P1_x        = cons[i].point1         == null ? 0 : cons[i].point1.x.Value;
+      double P1_y        = cons[i].point1         == null ? 0 : cons[i].point1.y.Value;
+      double P2_x        = cons[i].point2         == null ? 0 : cons[i].point2.x.Value;
+      double P2_y        = cons[i].point2         == null ? 0 : cons[i].point2.y.Value;
+      double L1_P1_x     = cons[i].line1.p1       == null ? 0 : cons[i].line1.p1.x.Value;
+      double L1_P1_y     = cons[i].line1.p1       == null ? 0 : cons[i].line1.p1.y.Value;
+      double L1_P2_x     = cons[i].line1.p2       == null ? 0 : cons[i].line1.p2.x.Value;
+      double L1_P2_y     = cons[i].line1.p2       == null ? 0 : cons[i].line1.p2.y.Value;
+      double L2_P1_x     = cons[i].line2.p1       == null ? 0 : cons[i].line2.p1.x.Value;
+      double L2_P1_y     = cons[i].line2.p1       == null ? 0 : cons[i].line2.p1.y.Value;
+      double L2_P2_x     = cons[i].line2.p2       == null ? 0 : cons[i].line2.p2.x.Value;
+      double L2_P2_y     = cons[i].line2.p2       == null ? 0 : cons[i].line2.p2.y.Value;
+      double C1_Center_x = cons[i].circle1.center == null ? 0 : cons[i].circle1.center.x.Value;
+      double C1_Center_y = cons[i].circle1.center == null ? 0 : cons[i].circle1.center.y.Value;
+      double C1_rad      = cons[i].circle1        == null ? 0 : cons[i].circle1.rad.Value;
+      double C2_Center_x = cons[i].circle2.center == null ? 0 : cons[i].circle2.center.x.Value;
+      double C2_Center_y = cons[i].circle2.center == null ? 0 : cons[i].circle2.center.y.Value;
+      double C2_rad      = cons[i].circle2        == null ? 0 : cons[i].circle2.rad.Value;
+
+      double A1_startA   = cons[i].arc1           == null ? 0 : cons[i].arc1.startAngle.Value;
+      double A1_endA     = cons[i].arc1           == null ? 0 : cons[i].arc1.endAngle.Value;
+      double A1_radius   = cons[i].arc1           == null ? 0 : cons[i].arc1.rad.Value;
+      double A1_Center_x = cons[i].arc1.center    == null ? 0 : cons[i].arc1.center.x.Value;
+      double A1_Center_y = cons[i].arc1.center    == null ? 0 : cons[i].arc1.center.y.Value;
+      double A2_startA   = cons[i].arc2           == null ? 0 : cons[i].arc2.startAngle.Value;
+      double A2_endA     = cons[i].arc2           == null ? 0 : cons[i].arc2.endAngle.Value;
+      double A2_radius   = cons[i].arc2           == null ? 0 : cons[i].arc2.rad.Value;
+      double A2_Center_x = cons[i].arc2.center    == null ? 0 : cons[i].arc2.center.x.Value;
+      double A2_Center_y = cons[i].arc2.center    == null ? 0 : cons[i].arc2.center.y.Value;
+
+      double A1_Start_x = (A1_Center_x+A1_radius*Math.Cos(A1_startA));
+      double A1_Start_y = (A1_Center_y+A1_radius*Math.Sin(A1_startA));
+      double A1_End_x   = (A1_Center_x+A1_radius*Math.Cos(A1_endA));
+      double A1_End_y   = (A1_Center_y+A1_radius*Math.Sin(A1_endA));
+      double A2_Start_x = (A1_Center_x+A2_radius*Math.Cos(A2_startA));
+      double A2_Start_y = (A1_Center_y+A2_radius*Math.Sin(A2_startA));
+      double A2_End_x   = (A1_Center_x+A2_radius*Math.Cos(A2_endA));
+      double A2_End_y   = (A1_Center_y+A2_radius*Math.Sin(A2_endA));
+
+
+      double length = cons[i].parameter == null ? 0 : cons[i].parameter.Value;
+      double distance = length;
+      double radius = length;
+      double angleP = length;
+      double quadIndex = length;
+
+      double Sym_P1_x = cons[i].SymLine.p1 == null ? 0 : cons[i].SymLine.p1.x.Value;
+      double Sym_P1_y = cons[i].SymLine.p1 == null ? 0 : cons[i].SymLine.p1.y.Value;
+
+      double Sym_P2_x = cons[i].SymLine.p2 == null ? 0 : cons[i].SymLine.p2.x.Value;
+      double Sym_P2_y = cons[i].SymLine.p2 == null ? 0 : cons[i].SymLine.p2.y.Value;
+
+
+
     if((cons[i]).type==ConstraintEnum.pointOnPoint)
     {
       //Hopefully avoid this constraint, make coincident points use the same parameters
@@ -758,7 +820,7 @@ public static double calc(constraint [] cons)
 
       t=(P1_x- L1_P1_x)/dx;
       Yint=L1_P1_y+dy*t;
-      temp= fabs((P1_y - Yint)) - distance;
+      temp= Math.Abs((P1_y - Yint)) - distance;
       error += temp*temp;
 
     }
@@ -769,7 +831,7 @@ public static double calc(constraint [] cons)
 
       t=(P1_y- L1_P1_y)/dy;
       Xint=L1_P1_x+dx*t;
-      temp= fabs((P1_x - Xint)) - distance;
+      temp= Math.Abs((P1_x - Xint)) - distance;
       error += temp*temp/10;
 
     }
@@ -786,7 +848,7 @@ public static double calc(constraint [] cons)
          dy = ody/hyp;
 
          double theta = atan2(dy,dx);
-         double p1 = odx-cos(theta)*cos(theta)*ody;
+         double p1 = odx-Math.Cos(theta)*Math.Cos(theta)*ody;
          error+=p1*p1*10;
          */
       error+=odx*odx*1000;
@@ -802,7 +864,7 @@ public static double calc(constraint [] cons)
          dy = ody/hyp;
 
          double theta = atan2(dy,dx);
-         double p1 = (ody-sin(theta)*sin(theta)*odx);
+         double p1 = (ody-Math.Sin(theta)*Math.Sin(theta)*odx);
          error+=p1*p1*10;
          */
       error+=ody*ody*1000;
@@ -884,7 +946,7 @@ public static double calc(constraint [] cons)
       //double u = (A1_Center_x - A1_Start_x) * (A1_End_x - A1_Start_x) + (A1_Center_y - A1_Start_y) * (A1_End_y - A1_Start_y);
       //u/=hyp*hyp;
 
-      //temp = sin(u - .5);
+      //temp = Math.Sin(u - .5);
       //error+=temp*temp*temp*temp*100000;
       //error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2));
       double a1endx2 = A1_End_x * A1_End_x;
@@ -976,7 +1038,7 @@ public static double calc(constraint [] cons)
       dy2=dy2/hyp2;
 
       temp = dx*dx2+dy*dy2;
-      temp2 = cos(angleP);
+      temp2 = Math.Cos(angleP);
       error += (temp+temp2)*(temp+temp2);
     }
 
@@ -996,7 +1058,7 @@ public static double calc(constraint [] cons)
       dy2=dy2/hyp2;
 
       temp = dx*dx2-dy*dy2;
-      temp2 = cos(M_PI-angleP);
+      temp2 = Math.Cos(M_PI-angleP);
       error += (temp+temp2)*(temp+temp2);
     }
 
@@ -1100,8 +1162,8 @@ public static double calc(constraint [] cons)
       rad1=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
       temp = atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
       temp2= atan2(A1_End_y-A1_Center_y,A1_End_x-A1_Center_x);
-      Ex=A1_Center_x+rad1*cos((temp2+temp)/2);
-      Ey=A1_Center_y+rad1*sin((temp2+temp)/2);
+      Ex=A1_Center_x+rad1*Math.Cos((temp2+temp)/2);
+      Ey=A1_Center_y+rad1*Math.Sin((temp2+temp)/2);
       temp = (Ex-P1_x);
       temp2 = (Ey-P1_y);
       error += temp*temp+temp2*temp2;
