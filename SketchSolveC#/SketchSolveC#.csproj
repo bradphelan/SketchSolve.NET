@@ -33,6 +33,7 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
+    <Compile Include="SketchSolveMixins.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

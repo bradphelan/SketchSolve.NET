@@ -273,7 +273,7 @@ namespace SketchSolve
         #endregion
     }
 
-    public class constraint
+    public class constraint : IEnumerable<Parameter>
     {
         public ConstraintEnum type;
         public point point1;
@@ -287,6 +287,40 @@ namespace SketchSolve
         public arc arc2;
         public Parameter parameter = null;
 //radius, length, angle etc...
+
+		#region IEnumerable implementation
+
+		public IEnumerator<Parameter> GetEnumerator ()
+		{
+			List<IEnumerable<Parameter>> list = new List<IEnumerable<Parameter>> () {
+				point1,
+				point2,
+				line1,
+				line2,
+				SymLine,
+				circle1,
+				circle2,
+				arc1,
+				arc2,
+				new []{parameter}
+			};
+			return list
+                .Where (p=>p!=null)
+                .SelectMany (p=>p)
+                .Where (p=>p!=null)
+                .GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable implementation
+
+		IEnumerator IEnumerable.GetEnumerator ()
+		{
+			return this.GetEnumerator ();
+		}
+
+		#endregion
     };
 
     public static class Solver
@@ -311,10 +345,21 @@ namespace SketchSolve
             return Math.Sqrt(a*a+b*b);
         }
 
-        public static Result solve(Parameter []x, constraint[] cons, bool isFine)
+        public static Result solve(bool isFine, params constraint[] cons)
         {
+            return solve(isFine, (IEnumerable<constraint>) cons);
+        }
+
+        public static Result solve(bool isFine, IEnumerable<constraint> cons)
+        {
+            var constraints = cons.ToArray();
+
+            // Get the parameters that need solving
+			Parameter[]x = constraints.SelectMany (p=>p)
+                .Distinct()
+                .ToArray ();
+
             int xLength = x.Length;
-            int consLength = cons.Length;
             double convergence, pert;
             //Save the original parameters for later.
             var origSolution = new double[xLength];
@@ -331,7 +376,7 @@ namespace SketchSolve
             int ftimes = 0;
             //Calculate Function at the starting point:
             double f0;
-            f0 = calc(cons);
+            f0 = calc(constraints);
             if (f0 < smallF)
                 return Result.succsess;
             ftimes++;
@@ -348,9 +393,9 @@ namespace SketchSolve
             {
                 temper = x[j].Value;
                 x[j].Value = temper - pert;
-                first = calc(cons);
+                first = calc(constraints);
                 x[j].Value = temper + pert;
-                second = calc(cons);
+                second = calc(constraints);
                 grad[j] = .5 * (second - first) / pert;
                 ftimes++;
                 /*
@@ -412,7 +457,7 @@ cstr.clear();
             {
                 x[i].Value = xold[i] + alpha2 * s[i];//calculate the new x
             }
-            f2 = calc(cons);
+            f2 = calc(constraints);
             ftimes++;
 
             //Take a step of alpha 3 that is 2*alpha2
@@ -421,7 +466,7 @@ cstr.clear();
             {
                 x[i].Value = xold[i] + alpha3 * s[i];//calculate the new x
             }
-            f3 = calc(cons);
+            f3 = calc(constraints);
             ftimes++;
 
             //Now reduce or lengthen alpha2 and alpha3 until the minimum is
@@ -439,7 +484,7 @@ cstr.clear();
                     {
                         x[i].Value = xold[i] + alpha2 * s[i];//calculate the new x
                     }
-                    f2 = calc(cons);
+                    f2 = calc(constraints);
                     ftimes++;
                 }
                 else if (f2 > f3)
@@ -453,7 +498,7 @@ cstr.clear();
                     {
                         x[i].Value = xold[i] + alpha3 * s[i];//calculate the new x
                     }
-                    f3 = calc(cons);
+                    f3 = calc(constraints);
                     ftimes++;
 
                 }
@@ -474,7 +519,7 @@ cstr.clear();
             {
                 x[i].Value = xold[i] + alphaStar * s[i];//calculate the new x
             }
-            fnew = calc(cons);
+            fnew = calc(constraints);
             ftimes++;
             fold = fnew;
             /*
@@ -543,9 +588,9 @@ cstr.clear();
                     //Calculate the new gradient vector
                     temper = x[i].Value;
                     x[i].Value = temper - pert;
-                    first = calc(cons);
+                    first = calc(constraints);
                     x[i].Value = temper + pert;
-                    second = calc(cons);
+                    second = calc(constraints);
                     gradnew[i] = .5 * (second - first) / pert;
                     ftimes++;
                     x[i].Value = temper;
@@ -656,7 +701,7 @@ cstr.clear();
                 {
                     x[i].Value = xold[i] + alpha2 * s[i];//calculate the new x
                 }
-                f2 = calc(cons);
+                f2 = calc(constraints);
                 ftimes++;
 
                 //Take a step of alpha 3 that is 2*alpha2
@@ -665,7 +710,7 @@ cstr.clear();
                 {
                     x[i].Value = xold[i] + alpha3 * s[i];//calculate the new x
                 }
-                f3 = calc(cons);
+                f3 = calc(constraints);
                 ftimes++;
 
                 //Now reduce or lengthen alpha2 and alpha3 until the minimum is
@@ -684,7 +729,7 @@ cstr.clear();
                         {
                             x[i].Value = xold[i] + alpha2 * s[i];//calculate the new x
                         }
-                        f2 = calc(cons);
+                        f2 = calc(constraints);
                         ftimes++;
                     }
                     else if (f2 > f3)
@@ -698,7 +743,7 @@ cstr.clear();
                         {
                             x[i].Value = xold[i] + alpha3 * s[i];//calculate the new x
                         }
-                        f3 = calc(cons);
+                        f3 = calc(constraints);
                         ftimes++;
                     }
                     /* this should be deleted soon!!!!
@@ -747,7 +792,7 @@ cstr.clear();
                 {
                     x[i].Value = xold[i] + alphaStar * s[i];//calculate the new x
                 }
-                fnew = calc(cons);
+                fnew = calc(constraints);
                 ftimes++;
 
                 /*
