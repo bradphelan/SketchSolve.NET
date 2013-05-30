@@ -12,6 +12,14 @@ namespace SketchSolve
                 line1 = This
             };
         }
+
+        public static constraint IsVertical(this line This){
+            return new constraint()
+            {
+                type = ConstraintEnum.vertical,
+                line1 = This
+            };
+        }
     }
 }
 
