@@ -238,8 +238,8 @@ cstr.clear();
       //Estimate the norm of N
 
       //Initialize N and calculate s
-      double *s = new double[xLength]; //The current search direction
-      double **N = new double*[xLength];
+      var s = new double[xLength]; //The current search direction
+      var N = new double[xLength][];
       for(int i=0; i < xLength; i++)
         N[i] = new double[xLength]; //The estimate of the Hessian inverse
       for(int i=0;i<xLength;i++)
@@ -261,7 +261,7 @@ cstr.clear();
       fnew=f0+1; 	//make fnew greater than fold
       double alpha=1; //Initial search vector multiplier
 
-      double *xold = new double[xLength]; //Storage for the previous design variables
+      var xold = new double[xLength]; //Storage for the previous design variables
       double fold;
       for(int i=0;i<xLength;i++)
       {
@@ -368,18 +368,18 @@ cstr.clear();
 
 
 
-      double *deltaX = new double[xLength];
-      double *gradnew = new double[xLength];
-      double *gamma = new double[xLength];
+      var deltaX = new double[xLength];
+      var gradnew = new double[xLength];
+      var gamma = new double[xLength];
       double bottom=0;
       double deltaXtDotGamma;
-      double *gammatDotN = new double[xLength];
+      var gammatDotN = new double[xLength];
       double gammatDotNDotGamma=0;
       double firstTerm=0;
-      double **FirstSecond = new double*[xLength];
-      double **deltaXDotGammatDotN = new double*[xLength];
-      double **gammatDotDeltaXt = new double*[xLength];
-      double **NDotGammaDotDeltaXt = new double*[xLength];
+      var FirstSecond = new double[xLength][];
+      var deltaXDotGammatDotN = new double[xLength][];
+      var gammatDotDeltaXt = new double[xLength][];
+      var NDotGammaDotDeltaXt = new double[xLength][];
       for(int i=0; i < xLength; i++)
       {
         FirstSecond[i] = new double[xLength];
