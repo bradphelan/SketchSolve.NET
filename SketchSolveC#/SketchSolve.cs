@@ -200,7 +200,7 @@ namespace SketchSolveC
       //Calculate Function at the starting point:
       double f0;
       f0 = calc(cons);
-      if(f0<smallF) return succsess;
+      if(f0<smallF) return Result.succsess;
       ftimes++;
       //Calculate the gradient at the starting point:
 
@@ -666,7 +666,7 @@ if(isFine==1) validSolution=validSolutionFine;
 else validSolution=validSoltuionRough;
 if(fnew<validSolution)
 {
-  return succsess;
+  return Result.succsess;
 }
 else
 {
@@ -676,7 +676,7 @@ else
   {
     x[i].Value=origSolution[i];
   }
-  return noSolution;
+  return Result.noSolution;
 }
 
 }
@@ -1190,7 +1190,7 @@ public static double calc(constraint [] cons)
       error += temp*temp+temp2*temp2;
     }
   }
-  return error;
+  return Result.error;
 
 }
 }
