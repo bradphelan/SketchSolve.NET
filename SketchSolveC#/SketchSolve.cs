@@ -206,17 +206,17 @@ namespace SketchSolveC
 
       //Calculate the gradient
       //gradF=x;
-      double *grad = new double[xLength]; //The gradient vector (1xn)
+      var grad = new double[xLength]; //The gradient vector (1xn)
       double norm,first,second,temper; //The norm of the gradient vector
       double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
       norm = 0;
       pert = f0*pertMag;
       for(int j=0;j<xLength;j++)
       {
-        temper= *x[j];
-        *x[j]= temper-pert;
+        temper= x[j].Value;
+        x[j].Value= temper-pert;
         first = calc(cons);
-        *x[j]= temper+pert;
+        x[j].Value= temper+pert;
         second = calc(cons);
         grad[j]=.5*(second-first)/pert;
         ftimes++;
