@@ -183,12 +183,13 @@ namespace SketchSolveC
 
     public static Result solve(Parameter []x, constraint[] cons, int isFine)
     {
+      int xLength = x.Length;
       double convergence,pert ;
       //Save the original parameters for later.
-      double *origSolution = new double[xLength];
+      var origSolution = new double[xLength];
       for(int i=0;i<xLength;i++)
       {
-        origSolution[i]=*x[i];
+        origSolution[i]=x[i].Value;
       }
 
       if(isFine>0) convergence = XconvergenceFine;
@@ -259,7 +260,7 @@ cstr.clear();
       double fold;
       for(int i=0;i<xLength;i++)
       {
-        xold[i]=*x[i];//Copy last values to xold
+        xold[i]=x[i].Value;//Copy last values to xold
       }
 
       ///////////////////////////////////////////////////////
@@ -274,7 +275,7 @@ cstr.clear();
       alpha2=1;
       for(int i=0;i<xLength;i++)
       {
-        *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+        x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
       }
       f2 = calc(cons,consLength);
       ftimes++;
@@ -283,7 +284,7 @@ cstr.clear();
       alpha3 = alpha*2;
       for(int i=0;i<xLength;i++)
       {
-        *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+        x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
       }
       f3=calc(cons,consLength);
       ftimes++;
@@ -301,7 +302,7 @@ cstr.clear();
           alpha2=alpha2/2;
           for(int i=0;i<xLength;i++)
           {
-            *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+            x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
           }
           f2=calc(cons,consLength);
           ftimes++;
@@ -316,7 +317,7 @@ cstr.clear();
           alpha3=alpha3*2;
           for(int i=0;i<xLength;i++)
           {
-            *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+            x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
           }
           f3=calc(cons,consLength);
           ftimes++;
@@ -336,7 +337,7 @@ cstr.clear();
       /// Set the values to alphaStar
       for(int i=0;i<xLength;i++)
       {
-        *x[i]=xold[i]+alphaStar*s[i];//calculate the new x
+        x[i].Value=xold[i]+alphaStar*s[i];//calculate the new x
       }
       fnew=calc(cons,consLength);
       ftimes++;
@@ -389,7 +390,7 @@ cstr.clear();
       ///Calculate deltaX
       for(int i=0;i<xLength;i++)
       {
-        deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the Hessian update
+        deltaX[i]=x[i].Value-xold[i];//Calculate the difference in x for the Hessian update
       }
       double maxIterNumber = MaxIterations * xLength;
       while(deltaXnorm>convergence && fnew>smallF && iterations<maxIterNumber)
@@ -404,14 +405,14 @@ cstr.clear();
         for(int i=0;i<xLength;i++)
         {
           //Calculate the new gradient vector
-          temper=*x[i];
-          *x[i]=temper-pert;
+          temper=x[i].Value;
+          x[i].Value=temper-pert;
           first = calc(cons,consLength);
-          *x[i]=temper+pert;
+          x[i].Value=temper+pert;
           second= calc(cons,consLength);
           gradnew[i]=.5*(second-first)/pert;
           ftimes++;
-          *x[i]=temper;
+          x[i].Value=temper;
           //Calculate the change in the gradient
           gamma[i]=gradnew[i]-grad[i];
           bottom+=deltaX[i]*gamma[i];
@@ -500,7 +501,7 @@ cstr.clear();
         //copy newest values to the xold
         for(int i=0;i<xLength;i++)
         {
-          xold[i]=*x[i];//Copy last values to xold
+          xold[i]=x[i].Value;//Copy last values to xold
         }
         steps=0;
 
@@ -516,7 +517,7 @@ cstr.clear();
         alpha2=1;
         for(int i=0;i<xLength;i++)
         {
-          *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+          x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
         }
         f2 = calc(cons,consLength);
         ftimes++;
@@ -525,7 +526,7 @@ cstr.clear();
         alpha3 = alpha2*2;
         for(int i=0;i<xLength;i++)
         {
-          *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+          x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
         }
         f3=calc(cons,consLength);
         ftimes++;
@@ -544,7 +545,7 @@ cstr.clear();
             alpha2=alpha2/2;
             for(int i=0;i<xLength;i++)
             {
-              *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+              x[i].Value=xold[i]+alpha2*s[i];//calculate the new x
             }
             f2=calc(cons,consLength);
             ftimes++;
@@ -559,7 +560,7 @@ cstr.clear();
             alpha3=alpha3*2;
             for(int i=0;i<xLength;i++)
             {
-              *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+              x[i].Value=xold[i]+alpha3*s[i];//calculate the new x
             }
             f3=calc(cons,consLength);
             ftimes++;
@@ -607,7 +608,7 @@ cstr.clear();
         /// Set the values to alphaStar
         for(int i=0;i<xLength;i++)
         {
-          *x[i]=xold[i]+alphaStar*s[i];//calculate the new x
+          x[i].Value=xold[i]+alphaStar*s[i];//calculate the new x
         }
         fnew=calc(cons,consLength);
         ftimes++;
@@ -630,7 +631,7 @@ cstr.clear();
         deltaXnorm=0;
         for(int i=0;i<xLength;i++)
         {
-          deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the hessian update
+          deltaX[i]=x[i].Value-xold[i];//Calculate the difference in x for the hessian update
           deltaXnorm+=deltaX[i]*deltaX[i];
           grad[i]=gradnew[i];
         }
@@ -672,7 +673,7 @@ else
   //Replace the bad numbers with the last result
   for(int i=0;i<xLength;i++)
   {
-    *x[i]=origSolution[i];
+    x[i].Value=origSolution[i];
   }
   return noSolution;
 }
