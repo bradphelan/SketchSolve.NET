@@ -739,7 +739,6 @@ namespace SketchSolveC
           dx = L1_P2_x - L1_P1_x;
           dy = L1_P2_y - L1_P1_y;
 
-          double Xint,Yint;
           t=-(L1_P1_x*dx-P1_x*dx+L1_P1_y*dy-P1_y*dy)/(dx*dx+dy*dy);
           Xint=L1_P1_x+dx*t;
           Yint=L1_P1_y+dy*t;
@@ -806,7 +805,7 @@ namespace SketchSolveC
 
         if(cons[i].type==tangentToCircle)
         {
-          double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2;
+          double Rpx,Rpy,RpxN,RpyN,hyp,error1,error2;
           dx = L1_P2_x-L1_P1_x;
           dy = L1_P2_y-L1_P1_y;
           hyp=_hypot(dx,dy);
@@ -858,7 +857,6 @@ namespace SketchSolveC
           dy = L1_P2_y - L1_P1_y;
 
 
-          double Xint,Yint,radsq;
           radsq = (A1_Center_x-A1_Start_x)*(A1_Center_x-A1_Start_x)+(A1_Center_y-A1_Start_y)*(A1_Center_y-A1_Start_y);
           t=-(L1_P1_x*dx-A1_Center_x*dx+L1_P1_y*dy-A1_Center_y*dy)/(dx*dx+dy*dy);
           Xint=L1_P1_x+dx*t;
