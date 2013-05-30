@@ -7,93 +7,52 @@ namespace SketchSolve
 {
     public enum ConstraintEnum
     {
-        pointOnPoint
-,
-        pointToLine
-,
-        pointOnLine
-,
-        horizontal
-,
-        vertical
-,
-        internalAngle
-,
-        radiusValue
-,
-        tangentToArc
-,
-        tangentToCircle
-,
-        arcRules
-,
-        P2PDistance
-,
-        P2PDistanceVert
-,
-        P2PDistanceHorz
-,
-        P2LDistance
-,
-        P2LDistanceVert
-,
-        P2LDistanceHorz
-,
-        lineLength
-,
-        equalLegnth
-,
-        arcRadius
-,
-        equalRadiusArcs
-,
-        equalRadiusCircles
-,
-        equalRadiusCircArc
-,
-        concentricArcs
-,
-        concentricCircles
-,
-        concentricCircArc
-,
-        circleRadius
-,
-        externalAngle
-,
-        parallel
-,
-        perpendicular
-,
-        colinear
-,
-        pointOnCircle
-,
-        pointOnArc
-,
-        pointOnLineMidpoint
-,
-        pointOnArcMidpoint
-,
-        pointOnCircleQuad
-,
-        symmetricPoints
-,
-        symmetricLines
-,
-        symmetricCircles
-,
-        symmetricArcs
+      pointOnPoint ,
+        pointToLine ,
+        pointOnLine ,
+        horizontal ,
+        vertical ,
+        internalAngle ,
+        radiusValue ,
+        tangentToArc ,
+        tangentToCircle ,
+        arcRules ,
+        P2PDistance ,
+        P2PDistanceVert ,
+        P2PDistanceHorz ,
+        P2LDistance ,
+        P2LDistanceVert ,
+        P2LDistanceHorz ,
+        lineLength ,
+        equalLegnth ,
+        arcRadius ,
+        equalRadiusArcs ,
+        equalRadiusCircles ,
+        equalRadiusCircArc ,
+        concentricArcs ,
+        concentricCircles ,
+        concentricCircArc ,
+        circleRadius ,
+        externalAngle ,
+        parallel ,
+        perpendicular ,
+        colinear ,
+        pointOnCircle ,
+        pointOnArc ,
+        pointOnLineMidpoint ,
+        pointOnArcMidpoint ,
+        pointOnCircleQuad ,
+        symmetricPoints ,
+        symmetricLines ,
+        symmetricCircles ,
+        symmetricArcs,
     }
 
     public enum Result
     {
-        error = -1
-,
-        succsess = 0
-,
-        noSolution = 1
-,
+        error = -1 ,
+        succsess = 0 ,
+        noSolution = 1 ,
     }
   /*
 
@@ -288,39 +247,39 @@ namespace SketchSolve
         public Parameter parameter = null;
 //radius, length, angle etc...
 
-		#region IEnumerable implementation
+    #region IEnumerable implementation
 
-		public IEnumerator<Parameter> GetEnumerator ()
-		{
-			List<IEnumerable<Parameter>> list = new List<IEnumerable<Parameter>> () {
-				point1,
-				point2,
-				line1,
-				line2,
-				SymLine,
-				circle1,
-				circle2,
-				arc1,
-				arc2,
-				new []{parameter}
-			};
-			return list
+    public IEnumerator<Parameter> GetEnumerator ()
+    {
+      List<IEnumerable<Parameter>> list = new List<IEnumerable<Parameter>> () {
+        point1,
+        point2,
+        line1,
+        line2,
+        SymLine,
+        circle1,
+        circle2,
+        arc1,
+        arc2,
+        new []{parameter}
+      };
+      return list
                 .Where (p=>p!=null)
                 .SelectMany (p=>p)
                 .Where (p=>p!=null)
                 .GetEnumerator();
-		}
+    }
 
-		#endregion
+    #endregion
 
-		#region IEnumerable implementation
+    #region IEnumerable implementation
 
-		IEnumerator IEnumerable.GetEnumerator ()
-		{
-			return this.GetEnumerator ();
-		}
+    IEnumerator IEnumerable.GetEnumerator ()
+    {
+      return this.GetEnumerator ();
+    }
 
-		#endregion
+    #endregion
     };
 
     public static class Solver
@@ -355,7 +314,7 @@ namespace SketchSolve
             var constraints = cons.ToArray();
 
             // Get the parameters that need solving
-			Parameter[]x = constraints.SelectMany (p=>p)
+      Parameter[]x = constraints.SelectMany (p=>p)
                 .Distinct()
                 .ToArray ();
 
@@ -433,7 +392,7 @@ cstr.clear();
                 }
             }
             double fnew;
-            fnew = f0 + 1; 	//make fnew greater than fold
+            fnew = f0 + 1;  //make fnew greater than fold
             double alpha = 1; //Initial search vector multiplier
 
             var xold = new double[xLength]; //Storage for the previous design variables
@@ -1090,7 +1049,7 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
          double dcex = A1_Center_x - A1_End_x;
          double dcey = A1_Center_y - A1_End_y;
          rad=(dcsx*dcsx + dcsy * dcsy);
-      //	rad+=(dcex*dcex + dcey * dcey)/4;
+      //  rad+=(dcex*dcex + dcey * dcey)/4;
 
       double dcx = A1_Center_x-x;
       double dcy = A1_Center_y-y;
