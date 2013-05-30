@@ -20,6 +20,15 @@ namespace SketchSolve
                 line1 = This
             };
         }
+
+        public static constraint IsColocated(this point This, point other){
+            return new constraint()
+            {
+                type = ConstraintEnum.pointOnPoint,
+                point1 = This,
+                point2 = other
+            };
+        }
     }
 }
 

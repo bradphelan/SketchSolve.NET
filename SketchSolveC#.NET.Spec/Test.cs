@@ -46,6 +46,21 @@ namespace SketchSolve.Spec
 
             line.p1.x.Value.Should ().BeApproximately (line.p2.x.Value, 0.001);
         }
+
+        [Test()]
+        public void PointOnPointConstraintShouldWork(){
+            var line1 = new line () { p1 = new point(0,1), p2 = new point(2, 3) };
+            var line2 = new line () { p1 = new point(10,100), p2 = new point(200, 300) };
+
+            SketchSolve.Solver.solve
+                ( true
+                 , line1.p1.IsColocated(line2.p2));
+
+            line1.p1.x.Value.Should().BeApproximately(line2.p2.x.Value, 0.001);
+            line1.p1.y.Value.Should().BeApproximately(line2.p2.y.Value, 0.001);
+
+        }
+
     }
 }
 
