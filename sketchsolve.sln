@@ -5,12 +5,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchSolveC#", "SketchSolveC#\SketchSolveC#.csproj", "{46D849FA-8E4B-4656-B494-290697EBD9EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchSolveC#.NET.Spec", "SketchSolveC#.NET.Spec\SketchSolveC#.NET.Spec.csproj", "{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Debug|Win32.Build.0 = Debug|Any CPU
+		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Release|Win32.ActiveCfg = Release|Any CPU
+		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Release|Win32.Build.0 = Release|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Debug|Win32.ActiveCfg = Debug|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Debug|Win32.Build.0 = Debug|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Release|Win32.ActiveCfg = Release|Any CPU
