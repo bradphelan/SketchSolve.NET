@@ -1,16 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sketchsolve", "sketchsolve.vcxproj", "{9E52E808-ABB8-4329-9876-FC686B0AFF81}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SketchSolveCLR", "SketchSolveCLR\SketchSolveCLR.vcxproj", "{0DD5CAC1-CC91-4E73-B820-A4E45027916F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9E52E808-ABB8-4329-9876-FC686B0AFF81} = {9E52E808-ABB8-4329-9876-FC686B0AFF81}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E1685222-9F73-4974-A207-431F71F6DFEE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SketchSolve.CLR.Spec", "SketchSolve.CLR.Spec\SketchSolve.CLR.Spec.vcxproj", "{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchSolveC#", "SketchSolveC#\SketchSolveC#.csproj", "{46D849FA-8E4B-4656-B494-290697EBD9EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Debug|Win32.Build.0 = Debug|Any CPU
+		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Release|Win32.Build.0 = Release|Any CPU
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Debug|Win32.Build.0 = Debug|Win32
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Release|Win32.ActiveCfg = Release|Win32
@@ -30,6 +27,11 @@ Global
 		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Debug|Win32.Build.0 = Debug|Win32
 		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Release|Win32.ActiveCfg = Release|Win32
 		{C7A7A476-5AD6-49BC-85E8-B29B1F9F8B38}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = SketchSolveC#\SketchSolveC#.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
