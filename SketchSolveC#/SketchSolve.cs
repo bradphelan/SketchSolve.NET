@@ -227,7 +227,7 @@ debugprint(cstr.str());
 cstr.clear();
 #endif
 */
-        *x[j]=temper;
+        x[j].Value=temper;
         norm = norm+(grad[j]*grad[j]);
       }
       norm = sqrt(norm);
