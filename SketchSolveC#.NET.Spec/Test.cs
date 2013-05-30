@@ -38,7 +38,7 @@ namespace SketchSolve.Spec
 
 			var r = SketchSolve.Solver.solve(parameters, cons, true);
 
-			points [0].y.Value.Should ().Be (points[1].y.Value); 
+			points [0].y.Value.Should ().BeInRange (points[1].y.Value-0.001, points[1].y.Value+0.001); 
 			points [0].x.Value.Should ().NotBe (points[1].x.Value); 
 		}
 	}
