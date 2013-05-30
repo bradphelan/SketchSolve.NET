@@ -29,6 +29,26 @@ namespace SketchSolve
                 point2 = other
             };
         }
+
+        public static constraint HasInternalAngle(this line This, line other, Parameter angle){
+            return new constraint()
+            {
+                type = ConstraintEnum.internalAngle,
+                line1 = This,
+                line2 = other,
+                parameter = angle
+            };
+        }
+
+        public static constraint HasExternalAngle(this line This, line other, Parameter angle){
+            return new constraint()
+            {
+                type = ConstraintEnum.externalAngle,
+                line1 = This,
+                line2 = other,
+                parameter = angle
+            };
+        }
     }
 }
 

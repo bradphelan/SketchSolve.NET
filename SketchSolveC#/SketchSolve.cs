@@ -98,10 +98,14 @@ namespace SketchSolve
     public class Parameter
     {
         public double Value = 0;
+        // true if the parameter is free to be adjusted by the
+        // solver
+        public bool free;
 
-        public Parameter (double v)
+        public Parameter (double v, bool free=true)
         {
             Value = v;
+            this.free = free;
         }
     }
 
@@ -110,10 +114,15 @@ namespace SketchSolve
         public Parameter x = new Parameter (0);
         public Parameter y = new Parameter (0);
 
-        public point (double x, double y)
+        public point (double x, double y, bool freex, bool freey)
         {
-            this.x = new Parameter (x);
-            this.y = new Parameter (y);
+            this.x = new Parameter (x, freex);
+            this.y = new Parameter (y, freey);
+        }
+        public point (double x, double y, bool free=true)
+        {
+            this.x = new Parameter (x, free);
+            this.y = new Parameter (y, free);
         }
 #region IEnumerable implementation
         public IEnumerator<Parameter> GetEnumerator ()
@@ -134,6 +143,40 @@ namespace SketchSolve
     {
         public point p1 = new point (0, 0);
         public point p2 = new point (0, 0);
+
+        public double dx {
+            get { return p2.x.Value - p1.x.Value;}
+        }
+
+        public double dy {
+            get { return p2.y.Value - p1.y.Value;}
+        }
+
+        public double dot ( line other){
+            return dx * other.dx + dy * other.dy; 
+        }
+
+        public double lengthSquared {
+            get {
+                return dx * dx + dy * dy;
+            }
+        }
+
+        public double length {
+            get {
+                return Math.Sqrt (lengthSquared);
+            }
+        }
+
+        // The cosine of the angle between
+        // the lines
+        public double cosine(line other){
+            return this.dot (other) /
+                length / 
+                other.length;
+        }
+
+
 #region IEnumerable implementation
         public IEnumerator<Parameter> GetEnumerator ()
         {
@@ -282,6 +325,7 @@ namespace SketchSolve
             // Get the parameters that need solving
             Parameter[] x = constraints.SelectMany (p=>p)
                 .Distinct ()
+                .Where(p=>p.free==true)
                 .ToArray ();
 
             int xLength = x.Length;
@@ -1051,39 +1095,14 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
                     error += (C1_rad - radius) * (C1_rad - radius);
                 }
                 if (cons [i].type == ConstraintEnum.internalAngle) {
-                    dx = L1_P2_x - L1_P1_x;
-                    dy = L1_P2_y - L1_P1_y;
-                    dx2 = L2_P2_x - L2_P1_x;
-                    dy2 = L2_P2_y - L2_P1_y;
+                    temp = cons [i].line1.cosine (cons[i].line2);
 
-                    hyp1 = _hypot (dx, dy);
-                    hyp2 = _hypot (dx2, dy2);
-
-                    dx = dx / hyp1;
-                    dy = dy / hyp1;
-                    dx2 = dx2 / hyp2;
-                    dy2 = dy2 / hyp2;
-
-                    temp = dx * dx2 + dy * dy2;
                     temp2 = Math.Cos (angleP);
-                    error += (temp + temp2) * (temp + temp2);
+                    error += (temp - temp2) * (temp - temp2);
                 }
 
                 if (cons [i].type == ConstraintEnum.externalAngle) {
-                    dx = L1_P2_x - L1_P1_x;
-                    dy = L1_P2_y - L1_P1_y;
-                    dx2 = L2_P2_x - L2_P1_x;
-                    dy2 = L2_P2_y - L2_P1_y;
-
-                    hyp1 = _hypot (dx, dy);
-                    hyp2 = _hypot (dx2, dy2);
-
-                    dx = dx / hyp1;
-                    dy = dy / hyp1;
-                    dx2 = dx2 / hyp2;
-                    dy2 = dy2 / hyp2;
-
-                    temp = dx * dx2 - dy * dy2;
+                    temp = cons [i].line1.cosine (cons[i].line2);
                     temp2 = Math.Cos (Math.PI-angleP);
                     error += (temp + temp2) * (temp + temp2);
                 }

@@ -61,6 +61,26 @@ namespace SketchSolve.Spec
 
         }
 
+        [Test()]
+        public void InternalAngleConstraintShouldWork(){
+            for (int i = 1; i < 10; i++) {
+                var line1 = new line () { p1 = new point(0,0,false), p2 = new point(10, 0, false, true) };
+                var line2 = new line () { p1 = new point(0,0,false), p2 = new point(10, -1, false) };
+
+                Console.WriteLine (i);
+                var a = Math.PI / 2 / 3;
+
+                SketchSolve.Solver.solve
+                    ( true
+                     , line1.HasInternalAngle(line2, new Parameter(a, false)));
+
+                var ca = line1.cosine (line2);
+                ca.Should ().BeApproximately (Math.Cos (a), 0.001);
+
+            }
+
+        }
+
     }
 }
 
