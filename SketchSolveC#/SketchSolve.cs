@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace SketchSolve
 {
@@ -167,30 +169,108 @@ namespace SketchSolve
         }
     }
 
-    public class point
+    public class point : IEnumerable<Parameter>
     {
-        public Parameter x = null;
-        public Parameter y = null;
+        public Parameter x = new Parameter(0);
+        public Parameter y = new Parameter(0);
+
+        public point(double x, double y){
+            this.x = new Parameter(x);
+            this.y = new Parameter(y);
+        }
+
+        #region IEnumerable implementation
+        public IEnumerator<Parameter> GetEnumerator()
+        {
+            yield return x;
+            yield return y;
+        }
+        #endregion
+        #region IEnumerable implementation
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+        #endregion
     }
 
-    public class line
+    public class line : IEnumerable<Parameter>
     {
-        public point p1 = null;
-        public point p2 = null;
+        public point p1 = new point(0,0);
+        public point p2 = new point(0,0);
+
+        #region IEnumerable implementation
+        public IEnumerator<Parameter> GetEnumerator()
+        {
+            return new [] { p1, p2 }.SelectMany(p=>p).GetEnumerator();
+        }
+        #endregion
+        #region IEnumerable implementation
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+        #endregion
     }
 
-    public class arc
+    public class arc : IEnumerable<Parameter>
     {
-        public Parameter startAngle = null;
-        public Parameter endAngle = null;
-        public Parameter rad = null;
-        public point center = null;
+        public Parameter startAngle = new Parameter(0);
+        public Parameter endAngle = new Parameter(0);
+        public Parameter rad = new Parameter(0);
+        public point center = new point(0,0);
+
+        #region IEnumerable implementation
+
+        public IEnumerator<Parameter> GetEnumerator()
+        {
+            yield return startAngle;
+            yield return endAngle;
+            yield return rad;
+            foreach (var p in center)
+            {
+                yield return p;
+            }
+        }
+
+        #endregion
+
+        #region IEnumerable implementation
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        #endregion
     }
 
-    public class circle
+    public class circle : IEnumerable<Parameter>
     {
-        public point center;
-        public Parameter rad = null;
+        public point center = new point(0,0);
+        public Parameter rad = new Parameter(0);
+
+        #region IEnumerable implementation
+
+        public IEnumerator<Parameter> GetEnumerator()
+        {
+            foreach (var p in center)
+            {
+                yield return p;
+            }
+            yield return rad;
+        }
+
+        #endregion
+
+        #region IEnumerable implementation
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        #endregion
     }
 
     public class constraint
