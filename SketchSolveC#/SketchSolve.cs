@@ -887,7 +887,7 @@ namespace SketchSolveC
           double a1startx2 = A1_Start_x*A1_Start_x;
           double a1starty2 = A1_Start_y*A1_Start_y;
           double num = -2*A1_Center_x*A1_End_x+a1endx2-2*A1_Center_y*A1_End_y+a1endy2+2*A1_Center_x*A1_Start_x-a1startx2+2*A1_Center_y*A1_Start_y-a1starty2;
-          error += num * num /(4.*a1endx2+a1endy2-2*A1_End_x*A1_Start_x+a1startx2-2*A1_End_y*A1_Start_y+a1starty2);
+          error += num * num /(4.0*a1endx2+a1endy2-2*A1_End_x*A1_Start_x+a1startx2-2*A1_End_y*A1_Start_y+a1starty2);
 
         }
 
