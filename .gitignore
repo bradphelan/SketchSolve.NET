@@ -1,5 +1,9 @@
 #VIM Files
 .*.sw*
+.swp
+
+#
+test-results
 
 #OS junk files
 [Tt]humbs.db
