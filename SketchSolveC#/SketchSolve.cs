@@ -183,7 +183,6 @@ namespace SketchSolveC
 
     public static Result solve(Parameter []x, constraint[] cons, int isFine)
     {
-      std::stringstream cstr;
       double convergence,pert ;
       //Save the original parameters for later.
       double *origSolution = new double[xLength];
