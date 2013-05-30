@@ -1184,8 +1184,9 @@ public static double calc(constraint [] cons)
         case 2:
           Ex-=C1_rad;
           break;
-        case 3:
-          Ey-=C1_rad;
+                        case 3:
+                            Ey -= C1_rad;
+                            break;
       }
       temp = (Ex-P1_x);
       temp2 = (Ey-P1_y);
@@ -1256,7 +1257,7 @@ public static double calc(constraint [] cons)
       error += temp*temp+temp2*temp2;
     }
   }
-  return Result.error;
+  return error;
 
 }
 }
