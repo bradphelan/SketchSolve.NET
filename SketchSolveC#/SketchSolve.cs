@@ -9,8 +9,6 @@ namespace SketchSolve
     {
         pointOnPoint
 ,
-        pointToLine
-,
         pointOnLine
 ,
         horizontal
