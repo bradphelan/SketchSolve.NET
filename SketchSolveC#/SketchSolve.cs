@@ -924,7 +924,7 @@ public static double calc(constraint [] cons)
       dy = L1_P2_y - L1_P1_y;
 
 
-      radsq = (A1_Center_x-A1_Start_x)*(A1_Center_x-A1_Start_x)+(A1_Center_y-A1_Start_y)*(A1_Center_y-A1_Start_y);
+      double radsq = (A1_Center_x-A1_Start_x)*(A1_Center_x-A1_Start_x)+(A1_Center_y-A1_Start_y)*(A1_Center_y-A1_Start_y);
       t=-(L1_P1_x*dx-A1_Center_x*dx+L1_P1_y*dy-A1_Center_y*dy)/(dx*dx+dy*dy);
       Xint=L1_P1_x+dx*t;
       Yint=L1_P1_y+dy*t;
@@ -948,7 +948,7 @@ public static double calc(constraint [] cons)
 
       //temp = Math.Sin(u - .5);
       //error+=temp*temp*temp*temp*100000;
-      //error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2));
+      //error+=Math.Pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + Math.Pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*Math.Pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - Math.Pow(A1_Start_y,2),2)/(8*Math.Pow(A1_End_y,2) + 8*Math.Pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*Math.Pow(A1_Start_y,2));
       double a1endx2 = A1_End_x * A1_End_x;
       double a1endy2 = A1_End_y * A1_End_y;
       double a1startx2 = A1_Start_x*A1_Start_x;
@@ -960,7 +960,7 @@ public static double calc(constraint [] cons)
 
     if(cons[i].type==ConstraintEnum.lineLength)
     {
-      temp= Math.Sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
+      temp= Math.Sqrt(Math.Pow(L1_P2_x - L1_P1_x,2) + Math.Pow(L1_P2_y - L1_P1_y,2)) - length;
       //temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
       error += temp*temp*100;
     }
@@ -1058,7 +1058,7 @@ public static double calc(constraint [] cons)
       dy2=dy2/hyp2;
 
       temp = dx*dx2-dy*dy2;
-      temp2 = Math.Cos(M_PI-angleP);
+      temp2 = Math.Cos(Math.PI-angleP);
       error += (temp+temp2)*(temp+temp2);
     }
 
