@@ -219,11 +219,13 @@ namespace SketchSolveC
         second = calc(cons,consLength);
         grad[j]=.5*(second-first)/pert;
         ftimes++;
+                /*
 #ifdef DEBUG
         cstr << "gradient: " << grad[j];
         debugprint(cstr.str());
         cstr.clear();
 #endif
+*/
         *x[j]=temper;
         norm = norm+(grad[j]*grad[j]);
       }
@@ -641,7 +643,7 @@ namespace SketchSolveC
       }
       ////Debug
 
-
+/*
 #ifdef DEBUG
 
       for(int i=0;i<xLength;i++)
@@ -656,28 +658,7 @@ namespace SketchSolveC
       cstr.clear();
 
 #endif
-
-      delete s;
-      for(int i=0; i < xLength; i++)
-      {
-        delete N[i];
-        delete FirstSecond[i];
-        delete deltaXDotGammatDotN[i];
-        delete gammatDotDeltaXt[i];
-        delete NDotGammaDotDeltaXt[i];
-
-      }
-      delete N;
-      delete FirstSecond;
-      delete deltaXDotGammatDotN;
-      delete gammatDotDeltaXt;
-      delete NDotGammaDotDeltaXt;
-      delete origSolution;
-
-      delete grad;
-      delete xold;
-      delete gammatDotN;
-
+*/
       ///End of function
       double validSolution;
       if(isFine==1) validSolution=validSolutionFine;
