@@ -693,31 +693,31 @@ public static double calc(constraint [] cons)
   double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,Xint,Yint,dx2,dy2,hyp1,hyp2,temp2;
   for(int i=0;i<consLength;i++)
   {
-    if((cons[i]).type==pointOnPoint)
+    if((cons[i]).type==ConstraintEnum.pointOnPoint)
     {
       //Hopefully avoid this constraint, make coincident points use the same parameters
       error += (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y);
     }
 
 
-    if(cons[i].type==P2PDistance)
+    if(cons[i].type==ConstraintEnum.P2PDistance)
     {
       error+= (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
 
     }
 
-    if(cons[i].type==P2PDistanceVert)
+    if(cons[i].type==ConstraintEnum.P2PDistanceVert)
     {
       error+= (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
     }
 
-    if(cons[i].type==P2PDistanceHorz)
+    if(cons[i].type==ConstraintEnum.P2PDistanceHorz)
     {
       error+= (P1_x - P2_x) * (P1_x - P2_x) - distance * distance;
     }
 
 
-    if((cons[i]).type==pointOnLine)
+    if((cons[i]).type==ConstraintEnum.pointOnLine)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -739,7 +739,7 @@ public static double calc(constraint [] cons)
       }
     }
 
-    if((cons[i]).type==P2LDistance)
+    if((cons[i]).type==ConstraintEnum.P2LDistance)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -751,7 +751,7 @@ public static double calc(constraint [] cons)
       error += temp*temp/10;
 
     }
-    if((cons[i]).type==P2LDistanceVert)
+    if((cons[i]).type==ConstraintEnum.P2LDistanceVert)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -762,7 +762,7 @@ public static double calc(constraint [] cons)
       error += temp*temp;
 
     }
-    if((cons[i]).type==P2LDistanceHorz)
+    if((cons[i]).type==ConstraintEnum.P2LDistanceHorz)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -775,7 +775,7 @@ public static double calc(constraint [] cons)
     }
 
 
-    if(cons[i].type==vertical)
+    if(cons[i].type==ConstraintEnum.vertical)
     {
       double odx = L1_P2_x - L1_P1_x;
       /*
@@ -792,7 +792,7 @@ public static double calc(constraint [] cons)
       error+=odx*odx*1000;
     }
 
-    if(cons[i].type==horizontal)
+    if(cons[i].type==ConstraintEnum.horizontal)
     {
       //double odx = L1_P2_x - L1_P1_x;
       double ody = L1_P2_y - L1_P1_y;
@@ -808,7 +808,7 @@ public static double calc(constraint [] cons)
       error+=ody*ody*1000;
     }
 
-    if(cons[i].type==tangentToCircle)
+    if(cons[i].type==ConstraintEnum.tangentToCircle)
     {
       double Rpx,Rpy,RpxN,RpyN,hyp,error1,error2;
       dx = L1_P2_x-L1_P1_x;
@@ -829,7 +829,7 @@ public static double calc(constraint [] cons)
 
     }
 
-    if(cons[i].type==tangentToArc)
+    if(cons[i].type==ConstraintEnum.tangentToArc)
     {
       /*
          double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
@@ -870,7 +870,7 @@ public static double calc(constraint [] cons)
       error += temp*temp;
     }
 
-    if(cons[i].type==arcRules)
+    if(cons[i].type==ConstraintEnum.arcRules)
     {
       //rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
       //rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
@@ -896,20 +896,20 @@ public static double calc(constraint [] cons)
 
     }
 
-    if(cons[i].type==lineLength)
+    if(cons[i].type==ConstraintEnum.lineLength)
     {
       temp= Math.Sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
       //temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
       error += temp*temp*100;
     }
 
-    if(cons[i].type==equalLegnth)
+    if(cons[i].type==ConstraintEnum.equalLegnth)
     {
       temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - _hypot(L2_P2_x - L2_P1_x , L2_P2_y - L2_P1_y);
       error += temp*temp;
     }
 
-    if(cons[i].type==arcRadius)
+    if(cons[i].type==ConstraintEnum.arcRadius)
     {
       rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
       rad2 = _hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
@@ -917,7 +917,7 @@ public static double calc(constraint [] cons)
       error += temp*temp;
     }
 
-    if(cons[i].type==equalRadiusArcs)
+    if(cons[i].type==ConstraintEnum.equalRadiusArcs)
     {
       rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
       rad2 = _hypot(A2_Center_x - A2_Start_x , A2_Center_y - A2_Start_y);
@@ -925,42 +925,42 @@ public static double calc(constraint [] cons)
       error += temp*temp;
     }
 
-    if(cons[i].type==equalRadiusCircles)
+    if(cons[i].type==ConstraintEnum.equalRadiusCircles)
     {
       temp = C1_rad - C2_rad;
       error += temp*temp;
     }
 
-    if(cons[i].type==equalRadiusCircArc)
+    if(cons[i].type==ConstraintEnum.equalRadiusCircArc)
     {
       rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
       temp = rad1-C1_rad;
       error += temp*temp;
     }
 
-    if(cons[i].type==concentricArcs)
+    if(cons[i].type==ConstraintEnum.concentricArcs)
     {
       temp = _hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
       error += temp*temp;
     }
 
-    if(cons[i].type==concentricCircles)
+    if(cons[i].type==ConstraintEnum.concentricCircles)
     {
       temp = _hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y);
       error += temp*temp;
     }
 
-    if(cons[i].type==concentricCircArc)
+    if(cons[i].type==ConstraintEnum.concentricCircArc)
     {
       temp = _hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
       error += temp*temp;
     }
 
-    if(cons[i].type==circleRadius)
+    if(cons[i].type==ConstraintEnum.circleRadius)
     {
       error += (C1_rad - radius)*(C1_rad - radius);
     }
-    if(cons[i].type==internalAngle)
+    if(cons[i].type==ConstraintEnum.internalAngle)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -980,7 +980,7 @@ public static double calc(constraint [] cons)
       error += (temp+temp2)*(temp+temp2);
     }
 
-    if(cons[i].type==externalAngle)
+    if(cons[i].type==ConstraintEnum.externalAngle)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -1000,7 +1000,7 @@ public static double calc(constraint [] cons)
       error += (temp+temp2)*(temp+temp2);
     }
 
-    if(cons[i].type==perpendicular)
+    if(cons[i].type==ConstraintEnum.perpendicular)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -1019,7 +1019,7 @@ public static double calc(constraint [] cons)
       error += (temp)*(temp);
     }
 
-    if(cons[i].type==parallel)
+    if(cons[i].type==ConstraintEnum.parallel)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
@@ -1038,7 +1038,7 @@ public static double calc(constraint [] cons)
       error += (temp)*(temp);
     }
     // Colinear constraint
-    if(cons[i].type==colinear)
+    if(cons[i].type==ConstraintEnum.colinear)
     {
       dx = L1_P2_x - L1_P1_x;
       dy = L1_P2_y - L1_P1_y;
