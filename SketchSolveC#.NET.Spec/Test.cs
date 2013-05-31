@@ -87,6 +87,48 @@ namespace SketchSolve.Spec
 
         }
 
+        [Test()]
+        public void ExternalAngleConstraintShouldWork()
+        {
+            for (int i = 1; i < 10; i++)
+            {
+                var line1 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 0, false, true) };
+                var line2 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, -1, false) };
+
+                Console.WriteLine(i);
+                var a = Math.PI / 2 / 3;
+
+                SketchSolve.Solver.solve
+                    (true
+                     , line1.HasExternalAngle(line2, new Parameter(a, false)));
+
+                line1
+                    .cosine(line2)
+                    .Should()
+                    .BeApproximately(Math.Cos(Math.PI - a), 0.001);
+
+            }
+
+        }
+
+        [Test()]
+        public void PerpendicularLineConstraintShouldWork()
+        {
+            for (int i = 1; i < 10; i++)
+            {
+                var line1 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 0, false, true) };
+                var line2 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 10,true,  false) };
+
+                var a = Math.PI / 2 / 3;
+
+                SketchSolve.Solver.solve
+                    (true
+                     , line1.IsPerpendicularTo(line2));
+
+                line1
+                    .dot(line2)
+                    .Should()
+                    .BeApproximately(0, 0.001);
 
             }
 
