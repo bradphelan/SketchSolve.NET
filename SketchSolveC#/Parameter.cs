@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SketchSolve
+{
+    public class Parameter
+    {
+        public double Value = 0;
+        // true if the parameter is free to be adjusted by the
+        // solver
+        public bool free;
+
+        public Parameter (double v, bool free=true)
+        {
+            Value = v;
+            this.free = free;
+        }
+    }
+}

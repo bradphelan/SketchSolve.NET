@@ -5,85 +5,6 @@ using System.Collections;
 
 namespace SketchSolve
 {
-    public enum ConstraintEnum
-    {
-        pointOnPoint
-,
-        pointOnLine
-,
-        horizontal
-,
-        vertical
-,
-        internalAngle
-,
-        radiusValue
-,
-        tangentToArc
-,
-        tangentToCircle
-,
-        arcRules
-,
-        P2PDistance
-,
-        P2PDistanceVert
-,
-        P2PDistanceHorz
-,
-        P2LDistance
-,
-        P2LDistanceVert
-,
-        P2LDistanceHorz
-,
-        lineLength
-,
-        equalLegnth
-,
-        arcRadius
-,
-        equalRadiusArcs
-,
-        equalRadiusCircles
-,
-        equalRadiusCircArc
-,
-        concentricArcs
-,
-        concentricCircles
-,
-        concentricCircArc
-,
-        circleRadius
-,
-        externalAngle
-,
-        parallel
-,
-        perpendicular
-,
-        colinear
-,
-        pointOnCircle
-,
-        pointOnArc
-,
-        pointOnLineMidpoint
-,
-        pointOnArcMidpoint
-,
-        pointOnCircleQuad
-,
-        symmetricPoints
-,
-        symmetricLines
-,
-        symmetricCircles
-,
-        symmetricArcs
-,
-    }
 
     public enum Result
     {
@@ -94,202 +15,6 @@ namespace SketchSolve
         noSolution = 1
 ,
     }
-
-    public class Parameter
-    {
-        public double Value = 0;
-        // true if the parameter is free to be adjusted by the
-        // solver
-        public bool free;
-
-        public Parameter (double v, bool free=true)
-        {
-            Value = v;
-            this.free = free;
-        }
-    }
-
-    public class point : IEnumerable<Parameter>
-    {
-        public Parameter x = new Parameter (0);
-        public Parameter y = new Parameter (0);
-
-        public point (double x, double y, bool freex, bool freey)
-        {
-            this.x = new Parameter (x, freex);
-            this.y = new Parameter (y, freey);
-        }
-        public point (double x, double y, bool free=true)
-        {
-            this.x = new Parameter (x, free);
-            this.y = new Parameter (y, free);
-        }
-#region IEnumerable implementation
-        public IEnumerator<Parameter> GetEnumerator ()
-        {
-            yield return x;
-            yield return y;
-        }
-#endregion
-#region IEnumerable implementation
-        IEnumerator IEnumerable.GetEnumerator ()
-        {
-            return this.GetEnumerator ();
-        }
-#endregion
-    }
-
-    public class line : IEnumerable<Parameter>
-    {
-        public point p1 = new point (0, 0);
-        public point p2 = new point (0, 0);
-
-        public double dx {
-            get { return p2.x.Value - p1.x.Value;}
-        }
-
-        public double dy {
-            get { return p2.y.Value - p1.y.Value;}
-        }
-
-        public double dot ( line other){
-            return dx * other.dx + dy * other.dy; 
-        }
-
-        public double lengthSquared {
-            get {
-                return dx * dx + dy * dy;
-            }
-        }
-
-        public double length {
-            get {
-                return Math.Sqrt (lengthSquared);
-            }
-        }
-
-        // The cosine of the angle between
-        // the lines
-        public double cosine(line other){
-            return this.dot (other) /
-                length / 
-                other.length;
-        }
-
-
-#region IEnumerable implementation
-        public IEnumerator<Parameter> GetEnumerator ()
-        {
-            return new [] { p1, p2 }.SelectMany (p=>p).GetEnumerator ();
-        }
-#endregion
-#region IEnumerable implementation
-        IEnumerator IEnumerable.GetEnumerator ()
-        {
-            return this.GetEnumerator ();
-        }
-#endregion
-    }
-
-    public class arc : IEnumerable<Parameter>
-    {
-        public Parameter startAngle = new Parameter (0);
-        public Parameter endAngle = new Parameter (0);
-        public Parameter rad = new Parameter (0);
-        public point center = new point (0, 0);
-#region IEnumerable implementation
-
-        public IEnumerator<Parameter> GetEnumerator ()
-        {
-            yield return startAngle;
-            yield return endAngle;
-            yield return rad;
-            foreach (var p in center) {
-                yield return p;
-            }
-        }
-#endregion
-
-#region IEnumerable implementation
-
-        IEnumerator IEnumerable.GetEnumerator ()
-        {
-            return this.GetEnumerator ();
-        }
-#endregion
-    }
-
-    public class circle : IEnumerable<Parameter>
-    {
-        public point center = new point (0, 0);
-        public Parameter rad = new Parameter (0);
-#region IEnumerable implementation
-
-        public IEnumerator<Parameter> GetEnumerator ()
-        {
-            foreach (var p in center) {
-                yield return p;
-            }
-            yield return rad;
-        }
-#endregion
-
-#region IEnumerable implementation
-
-        IEnumerator IEnumerable.GetEnumerator ()
-        {
-            return this.GetEnumerator ();
-        }
-#endregion
-    }
-
-    public class constraint : IEnumerable<Parameter>
-    {
-        public ConstraintEnum type;
-        public point point1;
-        public point point2;
-        public line line1;
-        public line line2;
-        public line SymLine;
-        public circle circle1;
-        public circle circle2;
-        public arc arc1;
-        public arc arc2;
-        public Parameter parameter = null;
-        //radius, length, angle etc...
-
-#region IEnumerable implementation
-
-        public IEnumerator<Parameter> GetEnumerator ()
-        {
-            List<IEnumerable<Parameter>> list = new List<IEnumerable<Parameter>> () {
-                point1,
-                point2,
-                line1,
-                line2,
-                SymLine,
-                circle1,
-                circle2,
-                arc1,
-                arc2,
-                new []{parameter}
-            };
-            return list
-                .Where (p=>p!=null)
-                .SelectMany (p=>p)
-                .Where (p=>p!=null)
-                .GetEnumerator ();
-        }
-#endregion
-
-#region IEnumerable implementation
-
-        IEnumerator IEnumerable.GetEnumerator ()
-        {
-            return this.GetEnumerator ();
-        }
-#endregion
-    };
 
     public static class Solver
     {
@@ -313,12 +38,12 @@ namespace SketchSolve
             return Math.Sqrt (a*a+b*b);
         }
 
-        public static Result solve (bool isFine, params constraint[] cons)
+        public static Result solve (bool isFine, params Constraint[] cons)
         {
-            return solve (isFine, (IEnumerable<constraint>)cons);
+            return solve (isFine, (IEnumerable<Constraint>)cons);
         }
 
-        public static Result solve (bool isFine, IEnumerable<constraint> cons)
+        public static Result solve (bool isFine, IEnumerable<Constraint> cons)
         {
             var constraints = cons.ToArray ();
 
@@ -784,7 +509,7 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
 
         }
 
-        public static double calc (constraint [] cons)
+        public static double calc (Constraint [] cons)
         {
             int consLength = cons.Length;
             double error = 0;
@@ -1104,7 +829,7 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
                 if (cons [i].type == ConstraintEnum.externalAngle) {
                     temp = cons [i].line1.cosine (cons[i].line2);
                     temp2 = Math.Cos (Math.PI-angleP);
-                    error += (temp + temp2) * (temp + temp2);
+                    error += (temp - temp2) * (temp - temp2);
                 }
 
                 if (cons [i].type == ConstraintEnum.perpendicular) {
