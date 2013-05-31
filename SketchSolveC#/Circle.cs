@@ -13,6 +13,25 @@ namespace SketchSolve
         public Parameter rad = new Parameter (0);
 #region IEnumerable implementation
 
+        public double TangentError(Line line)
+        {
+            var lu = line.Vector.Unit;
+
+            var pCircCenter = center;
+            var pLineP1 = line.p1;
+            var vLine = line.Vector;
+
+            var vLineStartToCircCenter = pCircCenter - pLineP1;
+
+            var pProjection = pLineP1 + vLineStartToCircCenter.ProjectOnto(vLine);
+
+            var vCircCenterToProjection = pProjection - pCircCenter;
+
+            var temp = vCircCenterToProjection.LengthSquared - rad.Value*rad.Value;
+
+            return temp * temp;
+        }
+
         public IEnumerator<Parameter> GetEnumerator ()
         {
             foreach (var p in center) {
