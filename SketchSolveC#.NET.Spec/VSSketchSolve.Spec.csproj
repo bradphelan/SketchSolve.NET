@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
+    <Compile Include="TestParameters.cs" />
+    <Compile Include="VectorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SketchSolveC#\VSSketchSolve.csproj">

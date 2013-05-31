@@ -24,7 +24,7 @@ namespace SketchSolve.Spec
         public void HorizontalConstraintShouldWork()
         {
 
-            var line = new Line() { p1 = new Point(0, 1), p2 = new Point(2, 3) };
+            var line = new Line(new Point(0, 1), new Point(2, 3) );
 
             SketchSolve.Solver.solve
                         (true
@@ -38,7 +38,7 @@ namespace SketchSolve.Spec
         public void VerticalConstraintShouldWork()
         {
 
-            var line = new Line() { p1 = new Point(0, 1), p2 = new Point(2, 3) };
+            var line = new Line(new Point(0, 1), new Point(2, 3) );
 
             SketchSolve.Solver.solve
                         (true
@@ -51,8 +51,8 @@ namespace SketchSolve.Spec
         [Test()]
         public void PointOnPointConstraintShouldWork()
         {
-            var line1 = new Line() { p1 = new Point(0, 1), p2 = new Point(2, 3) };
-            var line2 = new Line() { p1 = new Point(10, 100), p2 = new Point(200, 300) };
+            var line1 = new Line(new Point(0, 1),  new Point(2, 3) );
+            var line2 = new Line(new Point(10, 100),new Point(200, 300) );
 
             SketchSolve.Solver.solve
                 (true
@@ -68,8 +68,8 @@ namespace SketchSolve.Spec
         {
             for (int i = 1; i < 10; i++)
             {
-                var line1 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 0, false, true) };
-                var line2 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, -1, false) };
+                var line1 = new Line( new Point(0, 0, false), new Point(10, 0, false, true) );
+                var line2 = new Line( new Point(0, 0, false), new Point(10, -1, false) );
 
                 Console.WriteLine(i);
                 var a = Math.PI / 2 / 3;
@@ -79,7 +79,8 @@ namespace SketchSolve.Spec
                      , line1.HasInternalAngle(line2, new Parameter(a, false)));
 
                 line1
-                    .cosine(line2)
+                    .Vector
+                    .Cosine(line2.Vector)
                     .Should()
                     .BeApproximately(Math.Cos(a), 0.001);
 
@@ -92,8 +93,8 @@ namespace SketchSolve.Spec
         {
             for (int i = 1; i < 10; i++)
             {
-                var line1 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 0, false, true) };
-                var line2 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, -1, false) };
+                var line1 = new Line( new Point(0, 0, false),  new Point(10, 0, false, true) );
+                var line2 = new Line(  new Point(0, 0, false),  new Point(10, -1, false) );
 
                 Console.WriteLine(i);
                 var a = Math.PI / 2 / 3;
@@ -103,7 +104,8 @@ namespace SketchSolve.Spec
                      , line1.HasExternalAngle(line2, new Parameter(a, false)));
 
                 line1
-                    .cosine(line2)
+                    .Vector
+                    .Cosine(line2.Vector)
                     .Should()
                     .BeApproximately(Math.Cos(Math.PI - a), 0.001);
 
@@ -116,8 +118,8 @@ namespace SketchSolve.Spec
         {
             for (int i = 1; i < 10; i++)
             {
-                var line1 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 0, false, true) };
-                var line2 = new Line() { p1 = new Point(0, 0, false), p2 = new Point(10, 10,true,  false) };
+                var line1 = new Line(new Point(0, 0, false), new Point(10, 0, false, true) );
+                var line2 = new Line(new Point(0, 0, false), new Point(10, 10,true,  false) );
 
                 var a = Math.PI / 2 / 3;
 
@@ -126,12 +128,82 @@ namespace SketchSolve.Spec
                      , line1.IsPerpendicularTo(line2));
 
                 line1
-                    .dot(line2)
+                    .Vector
+                    .Dot(line2.Vector)
                     .Should()
                     .BeApproximately(0, 0.001);
 
             }
 
+        }
+
+        [Test()]
+        public void TangentToCircleConstraintShouldWork()
+        {
+            // Create a fully constrained circle at 0,0 with radius 1
+            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(1, false) };
+
+            var v = 1 / Math.Sin(Math.PI / 4);
+
+            var line = new Line(new Point(0, -v, false, false), new Point(35, 0, true, false));
+
+            var r = SketchSolve.Solver.solve
+                ( true
+                , line.IsTangentTo(circle));
+
+            r.Should().Be(Result.succsess);
+
+            line.p2.x.Value.Should().BeApproximately(v, 0.00001);
+
+            
+        }
+
+        /// <summary>
+        /// TODO
+        /// Not sure how to fix this one. My gues is that we have a local maximum due
+        /// to the initial conditions
+        /// </summary>
+        [Test()]
+        public void TangentToCircleConstraintWithLineInitiallyThroughCircleCenterShouldWork()
+        {
+            // Create a fully constrained circle at 0,0 with radius 1
+            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(1, false) };
+
+            var v = 1 / Math.Sin(Math.PI / 4);
+
+            var line = new Line(new Point(0, -v, false, false), new Point(0, 0, true, false));
+
+            var r = SketchSolve.Solver.solve
+                ( true
+                , line.IsTangentTo(circle));
+
+            r.Should().Be(Result.succsess);
+
+            line.p2.x.Value.Should().BeApproximately(v, 0.00001);
+        }
+
+        /// <summary>
+        /// TODO
+        /// Not sure how to fix this one. My gues is that we have a local maximum due
+        /// to the initial conditions
+        /// </summary>
+        [Test()]
+        public void TangentToCircleConstraintWithLineInitiallyHorizontalShouldWork()
+        {
+            // Create a fully constrained circle at 0,0 with radius 1
+            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(1, false) };
+
+            var v = 1 / Math.Sin(Math.PI / 4);
+
+            var line = new Line(new Point(-10, -v, false, false), new Point(10, -v, false, true));
+
+            var r = SketchSolve.Solver.solve
+                ( true
+                , line.IsTangentTo(circle));
+
+            r.Should().Be(Result.succsess);
+
+            line.p2.x.Value.Should().BeApproximately(v, 0.00001);
         }
 
     }

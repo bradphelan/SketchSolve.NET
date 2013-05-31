@@ -58,6 +58,15 @@ namespace SketchSolve
                 line2 = other,
             };
         }
+
+        public static Constraint IsTangentTo(this Line This, Circle other){
+            return new Constraint()
+            {
+                type = ConstraintEnum.tangentToCircle,
+                line1 = This,
+                circle1 = other,
+            };
+        }
     }
 }
 

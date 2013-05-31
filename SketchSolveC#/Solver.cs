@@ -82,6 +82,9 @@ namespace SketchSolve
             double f1, f2, f3, alpha1, alpha2, alpha3, alphaStar;
             norm = 0;
             pert = f0 * pertMag;
+
+            var rand = new Random();
+
             for (int j=0; j<xLength; j++) {
                 temper = x [j].Value;
                 x [j].Value = temper - pert;
@@ -249,6 +252,11 @@ cstr.clear();
             }
             double maxIterNumber = MaxIterations * xLength;
             while (deltaXnorm>convergence && fnew>smallF && iterations<maxIterNumber) {
+
+                Console.WriteLine("Parameters");
+                Console.WriteLine(String.Join("  ", x.Select(v=>v.Value)));
+                Console.WriteLine("/Parameters");
+
                 //////////////////////////////////////////////////////////////////////
                 ///Start of main loop!!!!
                 //////////////////////////////////////////////////////////////////////
@@ -679,24 +687,10 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
                 }
 
                 if (cons [i].type == ConstraintEnum.tangentToCircle) {
-                    double Rpx, Rpy, RpxN, RpyN, hyp, error1, error2;
-                    dx = L1_P2_x - L1_P1_x;
-                    dy = L1_P2_y - L1_P1_y;
-                    hyp = _hypot (dx, dy);
-                    //Calculate the expected tangent intersection points
-                    Rpx = C1_Center_x - dy / hyp * C1_rad;
-                    Rpy = C1_Center_y + dx / hyp * C1_rad;
-                    RpxN = C1_Center_x + dy / hyp * C1_rad;
-                    RpyN = C1_Center_y - dx / hyp * C1_rad;
 
-                    error1 = (-dy * Rpx + dx * Rpy + (L1_P1_x * L1_P2_y - L1_P2_x * L1_P1_y)) / hyp;
-                    error2 = (-dy * RpxN + dx * RpyN + (L1_P1_x * L1_P2_y - L1_P2_x * L1_P1_y)) / hyp;
-                    error1 = error1 * error1;
-                    error2 = error2 * error2;
-                    if (error1 < error2)
-                        error += error1;
-                    else
-                        error += error2;
+                    error += cons[i].circle1.TangentError(cons[i].line1);
+
+                    Console.WriteLine(error);
 
                 }
 
@@ -820,14 +814,14 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
                     error += (C1_rad - radius) * (C1_rad - radius);
                 }
                 if (cons [i].type == ConstraintEnum.internalAngle) {
-                    temp = cons [i].line1.cosine (cons[i].line2);
+                    temp = cons [i].line1.Vector.Cosine (cons[i].line2.Vector);
 
                     temp2 = Math.Cos (angleP);
                     error += (temp - temp2) * (temp - temp2);
                 }
 
                 if (cons [i].type == ConstraintEnum.externalAngle) {
-                    temp = cons [i].line1.cosine (cons[i].line2);
+                    temp = cons [i].line1.Vector.Cosine (cons[i].line2.Vector);
                     temp2 = Math.Cos (Math.PI-angleP);
                     error += (temp - temp2) * (temp - temp2);
                 }
@@ -1011,9 +1005,12 @@ cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
                     error += temp * temp + temp2 * temp2;
                 }
             }
-            return error;
+
+            // Prevent symetry errors
+            return error; 
 
         }
+        private static Random r = new Random();
     }
 }
 
