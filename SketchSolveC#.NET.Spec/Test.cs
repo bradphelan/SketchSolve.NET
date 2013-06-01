@@ -163,26 +163,49 @@ namespace SketchSolve.Spec
 
             
         }
-
         /// <summary>
         /// TODO
-        /// Not sure how to fix this one. My gues is that we have a local maximum due
-        /// to the initial conditions
+        /// Wierd problem when only one degree of freedom with horizontal initialconditions
         /// </summary>
         [Test()]
-        public void TangentToCircleConstraintWithLineInitiallyThroughCircleCenterShouldWork()
+        public void TangentToCircleConstraintWithLineInitiallyThroughCenter()
         {
             // Create a fully constrained circle at 0,0 with radius 1
             var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(1, false) };
 
             var v = 1 / Math.Sin(Math.PI / 4);
 
-            var line = new Line(new Point(0, -v, false, false), new Point(0, 0, true, false));
+            var line = new Line(new Point(0, -v, false, false), new Point(0, v, true, false));
 
             var r = SketchSolve.Solver.solve
                 ( true
                 , line.IsTangentTo(circle));
 
+            Console.WriteLine (line);
+            r.Should().BeApproximately(0,0.0001);
+
+            (circle.CenterTo (line).Vector.LengthSquared - 1).Should ().BeApproximately (0, 0.001);
+        }
+
+        /// <summary>
+        /// TODO
+        /// Wierd problem when only one degree of freedom with horizontal initialconditions
+        /// </summary>
+        [Test()]
+        public void TangentToCircleConstraintWithLineInitiallyHorizontal()
+        {
+            // Create a fully constrained circle at 0,0 with radius 1
+            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(1, false) };
+
+            var v = 1 / Math.Sin(Math.PI / 4);
+
+            var line = new Line(new Point(0, -v, false, false), new Point(10, -v, true, false));
+
+            var r = SketchSolve.Solver.solve
+                ( true
+                , line.IsTangentTo(circle));
+
+            Console.WriteLine (line);
             r.Should().BeApproximately(0,0.0001);
 
             (circle.CenterTo (line).Vector.LengthSquared - 1).Should ().BeApproximately (0, 0.001);
@@ -248,12 +271,17 @@ namespace SketchSolve.Spec
                 , line2.p2.IsColocated(line3.p1)
                 , line3.p2.IsColocated(line0.p1)
                 , line0.IsVertical()
+                //, line1.IsHorizontal()
+                //, line2.IsVertical()
+                //, line3.IsHorizontal()
                 );
 
             Console.WriteLine (line0);
             Console.WriteLine (line1);
             Console.WriteLine (line2);
             Console.WriteLine (line3);
+
+            Console.WriteLine (circle.CenterTo(line0));
 
             r.Should ().BeApproximately (0, 0.0001);
 
