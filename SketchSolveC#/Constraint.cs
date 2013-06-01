@@ -211,9 +211,10 @@ namespace SketchSolve
 
                 if (cons [i].type == ConstraintEnum.tangentToCircle) {
 
-                    error += cons[i].circle1.TangentError(cons[i].line1);
-
-                    Console.WriteLine(error);
+                    var l = cons [i].line1;
+                    var c = cons [i].circle1;
+                    temp = c.CenterTo (l).Vector.Length - c.rad.Value;
+                    error += temp * temp;
 
                 }
 

@@ -13,8 +13,14 @@ namespace SketchSolve
         public Parameter rad = new Parameter (0);
 #region IEnumerable implementation
 
-        public double TangentError(Line line)
-        {
+
+        /// <summary>
+        /// Returns a line normal to the circle and normal
+        /// to the line 
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="line"></param>
+        public Line CenterTo(Line line){
             var pCircCenter = center;
             var pLineP1 = line.p1;
             var vLine = line.Vector;
@@ -23,11 +29,12 @@ namespace SketchSolve
 
             var pProjection = pLineP1 + vLineStartToCircCenter.ProjectOnto(vLine);
 
-            var vCircCenterToProjection = pProjection - pCircCenter;
+            return new Line (center, pProjection);
+        }
 
-            var temp = vCircCenterToProjection.LengthSquared - rad.Value*rad.Value;
-
-            return temp * temp;
+        public override string ToString ()
+        {
+            return "[c " + center + ", r " + rad.Value + "]";
         }
 
         public IEnumerator<Parameter> GetEnumerator ()
