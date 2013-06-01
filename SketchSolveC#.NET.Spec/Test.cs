@@ -159,7 +159,7 @@ namespace SketchSolve.Spec
 
             r.Should().BeApproximately(0,0.0001);
 
-            line.p2.x.Value.Should().BeApproximately(v, 0.00001);
+            line.p2.x.Value.Should().BeApproximately(v, 0.001);
 
             
         }
@@ -185,7 +185,7 @@ namespace SketchSolve.Spec
 
             r.Should().BeApproximately(0,0.0001);
 
-            line.p2.x.Value.Should().BeApproximately(v, 0.00001);
+            (circle.CenterTo (line).Vector.LengthSquared - 1).Should ().BeApproximately (0, 0.001);
         }
 
         /// <summary>
@@ -197,20 +197,68 @@ namespace SketchSolve.Spec
         public void TangentToCircleConstraintWithLineInitiallyHorizontalShouldWork()
         {
             // Create a fully constrained circle at 0,0 with radius 1
-            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(1, false) };
+            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(10, false) };
 
-            var v = 1 / Math.Sin(Math.PI / 4);
+            var v = -15;
 
-            var line = new Line(new Point(-10, -v, false, false), new Point(10, -v, false, true));
+            var line = new Line(new Point(-100, -v, false, true), new Point(100, -v*2.1, false, true));
 
             var r = SketchSolve.Solver.solve
                 ( true
-                , line.IsTangentTo(circle));
+                , line.IsTangentTo(circle)
+                , line.IsHorizontal()
+                );
 
-            r.Should().BeApproximately(0,0.0001);
+            Console.WriteLine (line);
+            Console.WriteLine (circle);
 
-            line.p2.x.Value.Should().BeApproximately(v, 0.00001);
+            (circle.CenterTo (line).Vector.LengthSquared - circle.rad.Value*circle.rad.Value)
+                .Should ()
+                .BeApproximately (0, 0.001);
         }
+
+         [Test()]
+        public void SquareAroundCircle()
+        {
+            var circle = new Circle() { center = new Point(0, 0, false), rad = new Parameter(10, false) };
+
+            // We want a box around the circle where all lines touch the 
+            // circle and line0 is vertical. We arrange the lines roughly
+            // in the correct placement to get the search off to a good
+            // start
+            var line0 = new Line(new Point(-21,0), new Point(0, 23));
+            var line1 = new Line(new Point(0,22), new Point(22, 0));
+            var line2 = new Line(new Point(21,0), new Point(0, -29));
+            var line3 = new Line(new Point(0,-27), new Point(-25, 0));
+
+            var angle = new Parameter (Math.PI/2, false);
+
+            var r = SketchSolve.Solver.solve
+                ( true
+                , line0.IsTangentTo(circle)
+                , line1.IsTangentTo(circle)
+                , line2.IsTangentTo(circle)
+                , line3.IsTangentTo(circle)
+                , line0.HasInternalAngle (line1, angle)
+                , line1.HasInternalAngle(line2, angle) 
+                , line2.HasInternalAngle(line3, angle)
+                , line3.HasInternalAngle(line0, angle)
+                , line0.p2.IsColocated(line1.p1)
+                , line1.p2.IsColocated(line2.p1)
+                , line2.p2.IsColocated(line3.p1)
+                , line3.p2.IsColocated(line0.p1)
+                , line0.IsVertical()
+                );
+
+            Console.WriteLine (line0);
+            Console.WriteLine (line1);
+            Console.WriteLine (line2);
+            Console.WriteLine (line3);
+
+            r.Should ().BeApproximately (0, 0.0001);
+
+
+        }       
 
     }
 }
