@@ -62,7 +62,7 @@ namespace SketchSolve
 
         #region basic operators
         public static Vector operator *(Vector a, double b) {
-            return new Vector(a.dx.Value * b, a.dy.Value, false);
+            return new Vector(a.dx.Value * b, a.dy.Value * b, false);
         }
         public static Vector operator *(double b , Vector a)
         {
