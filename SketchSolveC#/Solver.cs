@@ -21,83 +21,88 @@ namespace SketchSolve
 
     public static class Solver
     {
-        ///////////////////////////////////////
-        /// BFGS Solver parameters
-        ///////////////////////////////////////
-        const double pertMag = 1e-6;
-        const double pertMin = 1e-10;
-        const double XconvergenceRough = 1e-8;
-        const double XconvergenceFine = 1e-10;
-        const double smallF = 1e-20;
-        const double validSolutionFine = 1e-12;
-        const double validSoltuionRough = 1e-4;
-        const double rough = 0;
-        const double fine = 1;
-        //Note that the total number of iterations allowed is MaxIterations *xLength;
-        const double MaxIterations = 50 ;
-
-
         public static double solve (bool isFine, params Constraint[] cons)
         {
             return solve (isFine, (IEnumerable<Constraint>)cons);
+        }
+
+        static Func<double[], double> LogWrap(Func<double [], double> fn ){
+            return args => {
+                var v = fn (args);
+                Console.WriteLine (v);
+                return v;
+            };
+        }
+
+        static Func<double[], double[]> LogWrap(Func<double [], double[]> fn ){
+            return args => {
+                var v = fn (args);
+                Console.WriteLine ("["+ String.Join (", ", v)+ "]");
+                return v;
+            };
+        }
+
+        static Func<double[], double[]> Grad(int n, Func<double[], double> fn){
+            var gradient = new FiniteDifferences (n, fn);
+            return a => gradient.Compute (a);
         }
 
         public static double solve (bool isFine, IEnumerable<Constraint> cons)
         {
             var constraints = cons.ToArray ();
 
-            // Get the parameters that need solving
+            // Get the parameters that need solving by selecting "free" ones
             Parameter[] x = constraints.SelectMany (p=>p)
                 .Distinct ()
                 .Where(p=>p.free==true)
                 .ToArray ();
 
+            // Wrap our constraint error function for Accord.NET
             Func<double[], double> objective = args => {
                 int i = 0;
                 foreach (var arg in args) {
                     x [i].Value = arg;
                     i++;
                 }
-                var error = Constraint.calc (constraints);
-
-                Console.WriteLine ( "o[" +  String.Join (", ", x.Select(y=>y.Value) ) + "]");
-                Console.WriteLine(error);
-                return error;
+                return Constraint.calc (constraints);
             };
 
-            var gradient 
-                = new FiniteDifferences (x.Length, objective); 
 
-            var f = new NonlinearObjectiveFunction
-                ( x.Length
-                , objective
-                 , args => { 
-                    var g =  gradient.Compute(args);
-                    Console.WriteLine ( "g[" +  String.Join (", ", g ) + "]");
-                    return g;
-                   }
-                );
-
-            // Now we can start stating the constraints 
-            var nlConstraints = x.Select (p =>
-                new NonlinearConstraint(f,
-                    // 1st contraint: x should be greater than or equal to 0
-                    function: (args) => p.Value, 
-                    shouldBe: ConstraintType.GreaterThanOrEqualTo, 
-                    value: 0
-                )).ToList ();
+            var nlConstraints = new List<NonlinearConstraint> ();
 
             // Finally, we create the non-linear programming solver 
-            var solver = new AugmentedLagrangianSolver(x.Length, new List<NonlinearConstraint>());
+            var solver = new AugmentedLagrangianSolver(x.Length,  nlConstraints);
+
+            // Copy in the initial conditions
+            x.Select(v=>v.Value).ToArray().CopyTo (solver.Solution,0);
 
             // And attempt to solve the problem 
-            double minValue = solver.Minimize(f);
-
-            return minValue;
-
+            return solver.Minimize(LogWrap(objective), LogWrap(Grad(x.Length, objective)));
         }
 
-        private static Random r = new Random();
+        // We don't use this at the moment
+        static List<NonlinearConstraint> CreateConstraints (Parameter[] x, NonlinearObjectiveFunction f)
+        {
+            // Now we can start stating the constraints 
+            var nlConstraints = x.SelectMany ((p, i) =>  {
+                Func<double[], double> cfn = args => x [i].Value;
+                return new[] {
+                    new NonlinearConstraint 
+                        ( f
+                        , function: cfn
+                        , shouldBe: ConstraintType.GreaterThanOrEqualTo
+                        , value: p.Min
+                        , gradient: Grad (x.Length, cfn)),
+                    new NonlinearConstraint 
+                        ( f
+                        , function: cfn
+                        , shouldBe: ConstraintType.LesserThanOrEqualTo
+                        , value: p.Max
+                        , gradient: Grad (x.Length, cfn)),
+                };
+            }).ToList ();
+            return nlConstraints;
+        }
     }
 }
 
