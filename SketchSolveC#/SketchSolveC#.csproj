@@ -41,5 +41,20 @@
     <Compile Include="Parameter.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Solver.cs" />
+    <Reference Include="Accord">
+      <HintPath>..\packages\Accord.2.8.1.0\lib\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge">
+      <HintPath>..\packages\AForge.2.2.4\lib\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math">
+      <HintPath>..\packages\AForge.Math.2.2.4\lib\AForge.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math">
+      <HintPath>..\packages\Accord.Math.2.8.1.0\lib\Accord.Math.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
