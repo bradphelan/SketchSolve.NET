@@ -28,11 +28,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SketchSolve.cs" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Compile Include="SketchSolveMixins.cs" />
+    <Compile Include="Arc.cs" />
+    <Compile Include="Circle.cs" />
+    <Compile Include="Constraint.cs" />
+    <Compile Include="ConstraintBuilderMixins.cs" />
+    <Compile Include="ConstraintEnum.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="Solver.cs" />
   </ItemGroup>
 </Project>
