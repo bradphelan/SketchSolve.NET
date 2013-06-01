@@ -15,8 +15,6 @@ namespace SketchSolve
 
         public double TangentError(Line line)
         {
-            var lu = line.Vector.Unit;
-
             var pCircCenter = center;
             var pLineP1 = line.p1;
             var vLine = line.Vector;
