@@ -57,6 +57,8 @@ namespace SketchSolve
                 .Where(p=>p.free==true)
                 .ToArray ();
 
+            Console.WriteLine ("Number of free vars is " + x.Length);
+
             // Wrap our constraint error function for Accord.NET
             Func<double[], double> objective = args => {
                 int i = 0;
