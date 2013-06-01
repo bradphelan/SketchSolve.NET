@@ -24,12 +24,14 @@ namespace SketchSolve.Spec
         public void HorizontalConstraintShouldWork()
         {
 
-            var line = new Line(new Point(0, 1), new Point(2, 3) );
+            var line = new Line(new Point(0, 1, false), new Point(2, 3, false, true) );
 
-            SketchSolve.Solver.solve
+            var error = SketchSolve.Solver.solve
                         (true
                           , line.IsHorizontal()
             );
+
+            error.Should ().BeApproximately (0, 0.0001);
 
             line.p1.y.Value.Should().BeApproximately(line.p2.y.Value, 0.001);
         }
@@ -38,28 +40,29 @@ namespace SketchSolve.Spec
         public void VerticalConstraintShouldWork()
         {
 
-            var line = new Line(new Point(0, 1), new Point(2, 3) );
+            var line = new Line(new Point(0, 1, false), new Point(2, 3, true, false) );
 
             SketchSolve.Solver.solve
                         (true
                           , line.IsVertical()
             );
 
+            Console.WriteLine (line);
             line.p1.x.Value.Should().BeApproximately(line.p2.x.Value, 0.001);
         }
 
         [Test()]
         public void PointOnPointConstraintShouldWork()
         {
-            var line1 = new Line(new Point(0, 1),  new Point(2, 3) );
-            var line2 = new Line(new Point(10, 100),new Point(200, 300) );
+            var line1 = new Line(new Point(0, 1),  new Point(2, 3, false) );
+            var line2 = new Line(new Point(10, 100,false),new Point(200, 300, false) );
 
             SketchSolve.Solver.solve
                 (true
-                 , line1.p1.IsColocated(line2.p2));
+                 , line1.p1.IsColocated(line2.p1));
 
-            line1.p1.x.Value.Should().BeApproximately(line2.p2.x.Value, 0.001);
-            line1.p1.y.Value.Should().BeApproximately(line2.p2.y.Value, 0.001);
+            line1.p1.x.Value.Should().BeApproximately(line2.p1.x.Value, 0.001);
+            line1.p1.y.Value.Should().BeApproximately(line2.p1.y.Value, 0.001);
 
         }
 
@@ -127,6 +130,9 @@ namespace SketchSolve.Spec
                     (true
                      , line1.IsPerpendicularTo(line2));
 
+                Console.WriteLine (line1);
+                Console.WriteLine (line2);
+
                 line1
                     .Vector
                     .Dot(line2.Vector)
@@ -151,7 +157,7 @@ namespace SketchSolve.Spec
                 ( true
                 , line.IsTangentTo(circle));
 
-            r.Should().Be(Result.succsess);
+            r.Should().BeApproximately(0,0.0001);
 
             line.p2.x.Value.Should().BeApproximately(v, 0.00001);
 
@@ -177,7 +183,7 @@ namespace SketchSolve.Spec
                 ( true
                 , line.IsTangentTo(circle));
 
-            r.Should().Be(Result.succsess);
+            r.Should().BeApproximately(0,0.0001);
 
             line.p2.x.Value.Should().BeApproximately(v, 0.00001);
         }
@@ -201,7 +207,7 @@ namespace SketchSolve.Spec
                 ( true
                 , line.IsTangentTo(circle));
 
-            r.Should().Be(Result.succsess);
+            r.Should().BeApproximately(0,0.0001);
 
             line.p2.x.Value.Should().BeApproximately(v, 0.00001);
         }
