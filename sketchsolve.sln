@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchSolveC#", "SketchSolv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchSolveC#.NET.Spec", "SketchSolveC#.NET.Spec\SketchSolveC#.NET.Spec.csproj", "{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}"
 EndProject
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "SketchSolveFS.Spec", "SketchSolveF#.Spec\SketchSolveFS.Spec.fsproj", "{F02D9BB0-FA04-4F10-B149-193DAB32C6D1}"
+EndProject
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "SketchSolveFS", "SketchSolveFS\SketchSolveFS.fsproj", "{44943F78-31C1-462D-B868-0AA1FEFD4198}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -17,10 +21,18 @@ Global
 		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Debug|Win32.Build.0 = Debug|Any CPU
 		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Release|Win32.ActiveCfg = Release|Any CPU
 		{3CDE657E-8735-4F4B-A796-0CC66AF7BC87}.Release|Win32.Build.0 = Release|Any CPU
+		{44943F78-31C1-462D-B868-0AA1FEFD4198}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{44943F78-31C1-462D-B868-0AA1FEFD4198}.Debug|Win32.Build.0 = Debug|Any CPU
+		{44943F78-31C1-462D-B868-0AA1FEFD4198}.Release|Win32.ActiveCfg = Release|Any CPU
+		{44943F78-31C1-462D-B868-0AA1FEFD4198}.Release|Win32.Build.0 = Release|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Debug|Win32.ActiveCfg = Debug|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Debug|Win32.Build.0 = Debug|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Release|Win32.ActiveCfg = Release|Any CPU
 		{46D849FA-8E4B-4656-B494-290697EBD9EC}.Release|Win32.Build.0 = Release|Any CPU
+		{F02D9BB0-FA04-4F10-B149-193DAB32C6D1}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F02D9BB0-FA04-4F10-B149-193DAB32C6D1}.Debug|Win32.Build.0 = Debug|Any CPU
+		{F02D9BB0-FA04-4F10-B149-193DAB32C6D1}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F02D9BB0-FA04-4F10-B149-193DAB32C6D1}.Release|Win32.Build.0 = Release|Any CPU
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Debug|Win32.Build.0 = Debug|Win32
 		{9E52E808-ABB8-4329-9876-FC686B0AFF81}.Release|Win32.ActiveCfg = Release|Win32
